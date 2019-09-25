@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Rhythm Doctor Custom Levels</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <link rel="stylesheet" href="./bundle.css">
+</head>
+<body>
+    <div id="app">
+        <!-- This div appears while loading.-->
+        <div v-if="state=='LOADING'" id="loading_state">
+            <p>Loading...</p>
+        </div>
+
+        <!-- This div appears when loaded. -->
+        <div v-if="state=='LOADED'" id="loaded_state">
+            <div class='inset-x-0.top-0 bg-gray-400 w-full flex'>
+                <ul class="flex float-left list-reset border border-grey-light rounded w-auto font-sans">
+                    <li v-on:click="switchPage(1)" v-show="currentPage > 3"><a class="block border-r border-grey-light px-3 py-2" href="#">1</a></li>
+                    <li v-on:click="switchPage(currentPage-2)" v-show="currentPage-1 > 1"><a class="block border-r border-grey-light px-3 py-2" href="#">{{currentPage-2}}</a></li>
+                    <li v-on:click="switchPage(currentPage-1)" v-show="currentPage > 1"><a class="block border-r border-grey-light px-3 py-2" href="#">{{currentPage-1}}</a></li>
+                    <li><a class="block border-r border-grey-light bg-gray-600 px-3 py-2" href="#">{{currentPage}}</a></li>
+                    <li v-on:click="switchPage(currentPage+1)" v-show="currentPage < numberOfPages"><a class="block border-r border-grey-light px-3 py-2" href="#">{{currentPage+1}}</a></li>
+                    <li v-on:click="switchPage(currentPage+2)" v-show="currentPage+1 < numberOfPages"><a class="block border-r border-grey-light px-3 py-2" href="#">{{currentPage+2}}</a></li>
+                    <li v-on:click="switchPage(numberOfPages)" v-show="currentPage+2 < numberOfPages"><a class="block border-r border-grey-light px-3 py-2" href="#">{{numberOfPages}}</a></li>
+                </ul>
+                <p>Show this many levels at once:</p>
+                <input type="number" v-model.number="limit" placeholder="10">
+            </div>
+
+            <div id="levels" class="p-16 flex flex-row flex-wrap items-stretch">
+                <!-- 
+                    This tag repeats for each level in the dataset. 
+                    I have provided a reference version that creates an
+                    unsorted list for each level. Change the HTML as
+                    required.
+                -->
+                <div v-for="level in truncated"
+                class="flex-grow flex flex-col max-w-sm w-full rounded shadow-lg bg-gray-200 p-4 m-2">
+                    <img class="w-full" :src="level.preview_img">
+                    <div class='px-6 py-4'>
+                        <div class="font-bold text-xl">{{level.song}}</div>
+                        <div class="italic text-l">{{level.artist}} | {{level.author}}</div>
+                        <p class="text-gray-700 text-base">
+                            {{level.description}}
+                        </p>
+                        <p class="text-gray-700 font-mono text-base">
+                            Difficulty: {{level.difficulty}}
+                        </p>
+                    </div>
+
+
+                    <div class="flex-grow">
+
+                    </div>
+
+                    <a 
+                    class="bg-gray-300 px-6 py-2 ml-6 w-2/3 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center"
+                    :href="level.download_url"
+                    >
+                        <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
+                        <span>Download</span>
+                    </a>
+
+                    <div class="flex flex-wrap items-end px-6 py-4 relative h-auto">
+                        <span 
+                        v-for="tag in level.tags" 
+                        class="inline-block bg-gray-400 rounded-full px-3 py-1 mb-1 text-sm font-semibold text-gray-700 mr-2"
+                        >
+                        {{tag}}
+                        </span>
+                      </div>
+                    <!-- <img :src="level.preview_img"></img> -->
+                    <!--
+                    <ul class="flex">
+                        <li class="level_image">
+                            <img :src="level.preview_img" height="300"></img>
+                        </li>
+                        <li><p>{{level.artist}}</p></li>
+                        <li><p>{{level.author}}</p></li>
+                        <li><p>{{level.description}}</p></li>
+                        <li><p>{{level.difficulty}}</p></li>
+                        <li><p>{{level.download_url}}</p></li>
+                        <li><p>{{level.last_updated}}</p></li>
+                        <li><p>{{level.max_bpm}}</p></li>
+                        <li><p>{{level.min_bpm}}</p></li>
+                        <li><p>{{level.seizure_warning}}</p></li>
+                        <li><p>{{level.single_player}}</p></li>
+                        <li><p>{{level.song}}</p></li>
+                        <li><p>{{level.tags}}</p></li>
+                        <li><p>{{level.two_player}}</p></li>
+
+                    </ul>
+                    -->
+                </div>
+            </div>
+        </div>
+
+        <!-- This div appears in an error. -->
+        <div v-if="state=='ERROR'" id="error_state">
+            <p>Error when loading the Rhythm Doctor API! ping ladybug now!!</p>
+            <p>{{error}}</p>
+        </div>
+    </div>
+
+    <script src="bundle.js"></script>
+</body>
+
+</html>

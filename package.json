@@ -1,0 +1,29 @@
+{
+  "name": "pathology",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.11.0",
+    "@vue/cli-plugin-eslint": "^3.11.0",
+    "@vue/cli-service": "^3.11.0"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:js": "npx browserify main.js -o bundle.js",
+    "build:css": "postcss main.css -o bundle.css",
+    "build": "npm run build:js && npm run build:css"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "postcss-import": "^12.0.1",
+    "tailwindcss": "^1.1.2",
+    "vue": "^2.6.10"
+  },
+  "browser": {
+    "vue": "vue/dist/vue.common.js"
+  }
+}
