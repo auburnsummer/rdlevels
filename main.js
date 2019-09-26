@@ -1,5 +1,6 @@
 const Vue = require('vue');
 const _ = require('lodash');
+const ClipboardJS = require('clipboard');
 
 const API_URL='https://script.google.com/macros/s/AKfycbzm3I9ENulE7uOmze53cyDuj7Igi7fmGiQ6w045fCRxs_sK3D4/exec';
 
@@ -39,6 +40,10 @@ var app = new Vue({
             console.log(data.data);
             this.target = data.data;
             this.state = "LOADED";
+            return this.$nextTick()
+        })
+        .then( () => {
+          new ClipboardJS('.copy-link');
         })
         .catch( (err) => {
             // change the state

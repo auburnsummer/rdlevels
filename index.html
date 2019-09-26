@@ -15,7 +15,8 @@
 
         <!-- This div appears when loaded. -->
         <div v-if="state=='LOADED'" id="loaded_state">
-            <div class='inset-x-0.top-0 bg-gray-400 w-full flex'>
+            <!-- top bar -->
+            <div class='inset-x-0 top-0 bg-gray-400 w-full flex flex-col md:flex-row'>
                 <ul class="flex float-left list-reset border border-grey-light rounded w-auto font-sans">
                     <li v-on:click="switchPage(1)" v-show="currentPage > 3"><a class="block border-r border-grey-light px-3 py-2" href="#">1</a></li>
                     <li v-on:click="switchPage(currentPage-2)" v-show="currentPage-1 > 1"><a class="block border-r border-grey-light px-3 py-2" href="#">{{currentPage-2}}</a></li>
@@ -29,16 +30,12 @@
                 <input type="number" v-model.number="limit" placeholder="10">
             </div>
 
-            <div id="levels" class="p-16 flex flex-row flex-wrap items-stretch">
-                <!-- 
-                    This tag repeats for each level in the dataset. 
-                    I have provided a reference version that creates an
-                    unsorted list for each level. Change the HTML as
-                    required.
-                -->
-                <div v-for="level in truncated"
-                class="flex-grow flex flex-col max-w-sm w-full rounded shadow-lg bg-gray-200 p-4 m-2">
+            <div id="levels" class="w-screen justify-center mx-auto flex flex-row flex-wrap items-stretch">
+                <div v-for="(level,index) in truncated"
+                class="flex-auto flex flex-col w-84 max-w-sm rounded shadow-lg bg-gray-200 p-4 m-2">
+
                     <img class="w-full" :src="level.preview_img">
+
                     <div class='px-6 py-4'>
                         <div class="font-bold text-xl">{{level.song}}</div>
                         <div class="italic text-l">{{level.artist}} | {{level.author}}</div>
@@ -50,18 +47,27 @@
                         </p>
                     </div>
 
-
+                    <!-- spacer -->
                     <div class="flex-grow">
 
                     </div>
 
-                    <a 
-                    class="bg-gray-300 px-6 py-2 ml-6 w-2/3 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center"
-                    :href="level.download_url"
-                    >
-                        <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
-                        <span>Download</span>
-                    </a>
+                    <!-- download and copy link buttons -->
+                    <div class="flex">
+                        <a 
+                        class="flex-auto bg-gray-300 px-6 py-2 ml-6 w-1/2 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center"
+                        :href="level.download_url"
+                        >
+                            <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
+                            <span>Download</span>
+                        </a>
+                        <a 
+                        class="copy-link flex-auto bg-gray-300 px-6 py-2 ml-6 w-1/2 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center"
+                        :data-clipboard-text="level.download_url">
+                            <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
+                            <span>Copy link</span>
+                        </a>
+                    </div>
 
                     <div class="flex flex-wrap items-end px-6 py-4 relative h-auto">
                         <span 
