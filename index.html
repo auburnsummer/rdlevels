@@ -43,9 +43,15 @@
                     <option value="difficulty">Difficulty</option>
                     <option value="author">Creator</option>
                 </select>
+                <input type="radio" v-model="display_type" name="display-type" id="display-cards" value="cards">
+                <label for="display-cards">Cards</label>
+                <input type="radio" v-model="display_type" name="display-type" id="display-list" value="list">
+                <label for="display-list">List</label>
+
             </div>
 
-            <div id="levels" class="w-screen justify-center mx-auto flex flex-row flex-wrap items-stretch">
+            <!-- CARDS DISPLAY -->
+            <div v-show="display_type == 'cards'" id="levels-cards" class="w-full justify-center mx-auto flex flex-row flex-wrap items-stretch">
                 <div v-for="(level,index) in truncated"
                 class="flex-auto flex flex-col w-84 max-w-sm rounded shadow-lg bg-gray-200 p-4 m-2">
 
@@ -78,7 +84,8 @@
                         </a>
                         <a 
                         class="copy-link flex-auto bg-gray-300 px-6 py-2 ml-6 w-1/2 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center"
-                        :data-clipboard-text="level.download_url">
+                        :data-clipboard-text="level.download_url"
+                        >
                             <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
                             <span>Copy link</span>
                         </a>
@@ -115,6 +122,10 @@
                     </ul>
                     -->
                 </div>
+            </div>
+
+            <div v-show="display_type == 'list'" id="levels-list">
+                <p>Hi i'm the list display i guess</p>
             </div>
         </div>
 

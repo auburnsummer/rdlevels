@@ -14,6 +14,7 @@ var app = new Vue({
       limit: 10,
       startIndex: 0,
       sort_by: 'last_updated',
+      display_type: 'cards',
     }, 
     computed: {
       sorted: function() {
