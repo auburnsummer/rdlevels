@@ -26,8 +26,23 @@
                     <li v-on:click="switchPage(currentPage+2)" v-show="currentPage+1 < numberOfPages"><a class="block border-r border-grey-light px-3 py-2" href="#">{{currentPage+2}}</a></li>
                     <li v-on:click="switchPage(numberOfPages)" v-show="currentPage+2 < numberOfPages"><a class="block border-r border-grey-light px-3 py-2" href="#">{{numberOfPages}}</a></li>
                 </ul>
-                <p>Show this many levels at once:</p>
-                <input type="number" v-model.number="limit" placeholder="10">
+                <p>Levels per page:</p>
+                <select v-model.number="limit">
+                    <option>5</option>
+                    <option selected>10</option>
+                    <option>25</option>
+                    <option>50</option>
+                    <option>100</option>
+                    <option>9999</option>
+                </select>
+                <p>Sort by:</p>
+                <select v-model="sort_by">
+                    <option value="score" hidden>Relevance</option>
+                    <option value="last_updated">Publish date</option>
+                    <option value="song">Song title</option>
+                    <option value="difficulty">Difficulty</option>
+                    <option value="author">Creator</option>
+                </select>
             </div>
 
             <div id="levels" class="w-screen justify-center mx-auto flex flex-row flex-wrap items-stretch">
