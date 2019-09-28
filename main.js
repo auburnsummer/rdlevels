@@ -2,6 +2,10 @@ const Vue = require('vue');
 const _ = require('lodash');
 const ClipboardJS = require('clipboard');
 const moment = require('moment');
+const axios = require('axios');
+const convert = require('./converter.js');
+const createDOMPurify = require('dompurify');
+const DOMPurify = createDOMPurify(window);
 
 const API_URL='https://script.google.com/macros/s/AKfycbzm3I9ENulE7uOmze53cyDuj7Igi7fmGiQ6w045fCRxs_sK3D4/exec';
 
@@ -51,11 +55,21 @@ var app = new Vue({
       currentPage: function() {
         let proposal = Math.floor(this.startIndex / this.limit) + 1;
         return Math.min(proposal, this.numberOfPages);
-      }
+      },
     },
     methods: {
       switchPage: function(pageNo) {
         this.startIndex = this.limit * (pageNo - 1);
+      },
+      convertToHtml : function(text) {
+        let proposedHtml = convert(text);
+        return DOMPurify.sanitize(proposedHtml);
+      },
+      getBPMText : function(min_bpm, max_bpm) {
+        if (min_bpm === max_bpm) {
+          return max_bpm;
+        }
+        return `${min_bpm}-${max_bpm}`
       }
     },
     mounted: function () {
