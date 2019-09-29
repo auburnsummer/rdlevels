@@ -56,13 +56,25 @@ module.exports = {
         '80': '20rem',
         '84': '21rem',
         'full': '100%',
-      }
+      },
+      transitionProperty: { // defaults to these values
+        'none': 'none',
+        'all': 'all',
+        'color': 'color',
+        'bg': 'background-color',
+        'border': 'border-color',
+        'colors': ['color', 'background-color', 'border-color'],
+        'opacity': 'opacity',
+        'transform': 'transform',
+        'filter': 'filter'
+      },
     }
   },
   variants: {
     visibility: ['responsive', 'group-hover'],
     defocus: ['group-hover'],
-    cursor: ['responsive', 'hover', 'focus']
+    cursor: ['responsive', 'hover', 'focus'],
+    opacity: ['responsive', 'group-hover'],
   },
   plugins: [
     require('@tailwindcss/custom-forms'),
@@ -78,5 +90,6 @@ module.exports = {
       };
       addUtilities(newUtilities, variants('defocus'));
     },
+    require('tailwindcss-transitions')(),
   ]
 }

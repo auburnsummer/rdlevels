@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset='utf-8'>
     <title>Rhythm Doctor Custom Levels</title>
@@ -55,21 +55,27 @@
                 <!-- each card starts here -->
                 <div 
                 v-for="(level,index) in truncated"
-                class="flex-grow flex flex-col 
-                       min-w-84 max-w-sm m-2
+                v-bind:key="level"
+                class="flex-1 flex flex-col 
+                       min-w-72 max-w-sm m-2
                        bg-gray-200
                        rounded-lg shadow-lg
                        group">
 
                     <!-- image -->
                     <div class="relative pb-9/16 bg-gray-400 rounded-t-lg overflow-hidden">
-                        <img class="group-hover:defocus absolute h-full w-full rounded-t-lg object-cover" :src="level.preview_img">
+                        
+                        <img class="group-hover:defocus transition-filter absolute h-full w-full rounded-t-lg object-cover" :src="level.preview_img">
                         
                         <!-- overlay -->
-                        <div class="invisible group-hover:visible absolute flex h-full w-full p-4 rounted-t-lg">
+                        <div 
+                        class="opacity-0 group-hover:opacity-100 transition-opacity
+                               absolute flex h-full w-full p-4 rounted-t-lg">
+                            <!-- description -->
                             <div class="flex-initial w-full text-white text-sm overflow-y-auto break-words"
                             v-html="convertToHtml(level.description)">
                             </div>
+                            <!-- download + copy link buttons -->
                             <div class="flex-none w-8 ml-2 flex flex-col">
                                 <a :data-clipboard-text="level.download_url" class="copy-link text-white border border-white rounded-lg hover:bg-gray-600 hover:cursor-pointer">
                                     <svg class="h-full w-full p-2 fill-current" aria-hidden="true" data-prefix="fas" data-icon="copy" class="svg-inline--fa fa-copy fa-w-14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -88,11 +94,11 @@
 
                     <!-- div for everything below the image -->
                     <div class="p-4">
+                        <!-- artist + song -->
                         <h2 class="text-gray-700 text-xs leading-cramped">{{level.artist}}</h2>
                         <h1 class="font-semibold text-lg leading-tight">{{level.song}}</h1>
                         
                         <!-- icons + metadata -->
-                        
                         <div class="flex flex-wrap gap gap-3">
                             <div class="flex items-center text-gray-700 text-xs">
                                     <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="pencil-alt" class="svg-inline--fa fa-pencil-alt fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -122,57 +128,38 @@
 
                         </div>
                         
-                        
                         <div class="flex flex-wrap items-end mt-2 relative h-auto gap gap-2">
-                            <div v-show="level.seizure_warning" class="flex items-center bg-red-300 rounded-full px-3 text-xs font-semibold text-white">
-                                <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="exclamation-triangle" class="svg-inline--fa fa-exclamation-triangle fa-w-18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                            <!-- epilepsy warning / starred -->
+                            <div v-show="level.seizure_warning" class="flex items-center bg-orange-200 rounded-full px-3 text-xs font-semibold">
+                                <svg class="h-3 w-3 fill-current text-orange-400" aria-hidden="true" data-prefix="fas" data-icon="exclamation-triangle" class="svg-inline--fa fa-exclamation-triangle fa-w-18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                                     <path fill="currentColor" d="M569.52 440.01c18.46 32-4.71 71.99-41.58 71.99H48.05c-36.93 0-60-40.05-41.57-71.99L246.42 24c18.47-32.01 64.72-31.96 83.16 0L569.52 440zM288 354a46 46 0 1 0 0 92 46 46 0 0 0 0-92zm-43.67-165.35l7.41 136A12 12 0 0 0 263.74 336h48.54a12 12 0 0 0 11.98-11.35l7.42-136A12 12 0 0 0 319.7 176h-63.38a12 12 0 0 0-11.98 12.65z"/>
                                 </svg>
                                 <span 
-                                class="inline-block ml-1"
+                                class="inline-block ml-1 text-orange-500"
                                 >
-                                    Epilepsy warning
+                                    Seizure warning
                                 </span>
                             </div>
-                            <div v-show="level.starred" class="flex items-center bg-yellow-600 rounded-full px-3 text-xs font-semibold text-white">
-                                    <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="stars" class="svg-inline--fa fa-stars fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <div v-show="level.starred" class="flex items-baseline bg-teal-200 rounded-full px-3 text-xs font-semibold">
+                                    <svg class="h-3 w-3 fill-current text-teal-400" aria-hidden="true" data-prefix="fas" data-icon="stars" class="svg-inline--fa fa-stars fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                         <path fill="currentColor" d="M336 160l26.7-53.3L416 80l-53.3-26.7L336 0l-26.7 53.3L256 80l53.3 26.7L336 160zm144 32l-16-32-16 32-32 16 32 16 16 32 16-32 32-16-32-16zm-115.7 75.3L259.5 252l-46.9-95.2c-8.4-17-32.7-17.2-41.2 0L124.5 252 19.7 267.3C.9 270-6.7 293.2 7 306.5l75.9 74-18 104.6c-3.2 18.9 16.7 33.1 33.3 24.2l93.8-49.4 93.8 49.4c16.7 8.8 36.5-5.3 33.3-24.2l-17.9-104.6 75.9-74c13.6-13.3 6-36.5-12.8-39.2z"/>
                                     </svg>
                                     <span 
-                                    class="inline-block ml-1"
+                                    class="inline-block ml-1 text-teal-500"
                                     >
                                         Starred
                                     </span>
                                 </div>
+                            <!-- tags -->
                             <span 
                             v-for="tag in level.tags" 
-                            class="inline-block bg-gray-400 rounded-full px-3 text-xs font-semibold text-gray-700"
+                            class="inline-block bg-gray-300 rounded-full px-3 text-xs font-semibold text-gray-600"
                             >
                             {{tag}}
                             </span>
                         </div>
                         
                     </div>
-                    <!-- quick reference
-                    <ul class="flex">
-                        <li class="level_image">
-                            <img :src="level.preview_img" height="300"></img>
-                        </li>
-                        <li><p>{{level.artist}}</p></li>
-                        <li><p>{{level.author}}</p></li>
-                        <li><p>{{level.description}}</p></li>
-                        <li><p>{{level.difficulty}}</p></li>
-                        <li><p>{{level.download_url}}</p></li>
-                        <li><p>{{level.last_updated}}</p></li>
-                        <li><p>{{level.max_bpm}}</p></li>
-                        <li><p>{{level.min_bpm}}</p></li>
-                        <li><p>{{level.seizure_warning}}</p></li>
-                        <li><p>{{level.single_player}}</p></li>
-                        <li><p>{{level.song}}</p></li>
-                        <li><p>{{level.tags}}</p></li>
-                        <li><p>{{level.two_player}}</p></li>
-                    </ul>
-                    -->
                 </div>
             </div> <!-- end card display -->
 

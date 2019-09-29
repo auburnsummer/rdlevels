@@ -603,6 +603,10 @@ video {
   height: auto;
 }
 
+*, *::before, *::after {
+  --transition-duration: 250ms;
+}
+
 .container {
   width: 100%;
 }
@@ -7359,43 +7363,23 @@ video {
   opacity: 1;
 }
 
-.hover\:opacity-0:hover {
+.group:hover .group-hover\:opacity-0 {
   opacity: 0;
 }
 
-.hover\:opacity-25:hover {
+.group:hover .group-hover\:opacity-25 {
   opacity: 0.25;
 }
 
-.hover\:opacity-50:hover {
+.group:hover .group-hover\:opacity-50 {
   opacity: 0.5;
 }
 
-.hover\:opacity-75:hover {
+.group:hover .group-hover\:opacity-75 {
   opacity: 0.75;
 }
 
-.hover\:opacity-100:hover {
-  opacity: 1;
-}
-
-.focus\:opacity-0:focus {
-  opacity: 0;
-}
-
-.focus\:opacity-25:focus {
-  opacity: 0.25;
-}
-
-.focus\:opacity-50:focus {
-  opacity: 0.5;
-}
-
-.focus\:opacity-75:focus {
-  opacity: 0.75;
-}
-
-.focus\:opacity-100:focus {
+.group:hover .group-hover\:opacity-100 {
   opacity: 1;
 }
 
@@ -14393,6 +14377,162 @@ video {
           filter: brightness(50%) saturate(120%) blur(2px);
 }
 
+.transition-none {
+  transition-property: none;
+  transition-duration: 250ms;
+  transition-duration: var(--transition-duration);
+}
+
+.transition-all {
+  transition-property: all;
+  transition-duration: 250ms;
+  transition-duration: var(--transition-duration);
+}
+
+.transition-color {
+  transition-property: color;
+  transition-duration: 250ms;
+  transition-duration: var(--transition-duration);
+}
+
+.transition-bg {
+  transition-property: background-color;
+  transition-duration: 250ms;
+  transition-duration: var(--transition-duration);
+}
+
+.transition-border {
+  transition-property: border-color;
+  transition-duration: 250ms;
+  transition-duration: var(--transition-duration);
+}
+
+.transition-colors {
+  transition-property: color, background-color, border-color;
+  transition-duration: 250ms;
+  transition-duration: var(--transition-duration);
+}
+
+.transition-opacity {
+  transition-property: opacity;
+  transition-duration: 250ms;
+  transition-duration: var(--transition-duration);
+}
+
+.transition-transform {
+  transition-property: transform;
+  transition-duration: 250ms;
+  transition-duration: var(--transition-duration);
+}
+
+.transition-filter {
+  transition-property: -webkit-filter;
+  transition-property: filter;
+  transition-property: filter, -webkit-filter;
+  transition-duration: 250ms;
+  transition-duration: var(--transition-duration);
+}
+
+.transition-0 {
+  --transition-duration: 0ms;
+  transition-duration: 0ms;
+  transition-duration: var(--transition-duration);
+}
+
+.transition-100 {
+  --transition-duration: 100ms;
+  transition-duration: 100ms;
+  transition-duration: var(--transition-duration);
+}
+
+.transition-250 {
+  --transition-duration: 250ms;
+  transition-duration: 250ms;
+  transition-duration: var(--transition-duration);
+}
+
+.transition-500 {
+  --transition-duration: 500ms;
+  transition-duration: 500ms;
+  transition-duration: var(--transition-duration);
+}
+
+.transition-750 {
+  --transition-duration: 750ms;
+  transition-duration: 750ms;
+  transition-duration: var(--transition-duration);
+}
+
+.transition-1000 {
+  --transition-duration: 1000ms;
+  transition-duration: 1000ms;
+  transition-duration: var(--transition-duration);
+}
+
+.transition-linear {
+  transition-timing-function: linear;
+}
+
+.transition-ease {
+  transition-timing-function: ease;
+}
+
+.transition-ease-in {
+  transition-timing-function: ease-in;
+}
+
+.transition-ease-out {
+  transition-timing-function: ease-out;
+}
+
+.transition-ease-in-out {
+  transition-timing-function: ease-in-out;
+}
+
+.transition-delay-0 {
+  transition-delay: 0ms;
+}
+
+.transition-delay-100 {
+  transition-delay: 100ms;
+}
+
+.transition-delay-250 {
+  transition-delay: 250ms;
+}
+
+.transition-delay-500 {
+  transition-delay: 500ms;
+}
+
+.transition-delay-750 {
+  transition-delay: 750ms;
+}
+
+.transition-delay-1000 {
+  transition-delay: 1000ms;
+}
+
+.will-change-auto {
+  will-change: auto;
+}
+
+.will-change-scroll {
+  will-change: scroll-position;
+}
+
+.will-change-contents {
+  will-change: contents;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.will-change-transform {
+  will-change: transform;
+}
+
 @media (min-width: 640px) {
   .sm\:gap-0 {
     --gap-x: 0;
@@ -20847,43 +20987,23 @@ video {
     opacity: 1;
   }
 
-  .sm\:hover\:opacity-0:hover {
+  .group:hover .sm\:group-hover\:opacity-0 {
     opacity: 0;
   }
 
-  .sm\:hover\:opacity-25:hover {
+  .group:hover .sm\:group-hover\:opacity-25 {
     opacity: 0.25;
   }
 
-  .sm\:hover\:opacity-50:hover {
+  .group:hover .sm\:group-hover\:opacity-50 {
     opacity: 0.5;
   }
 
-  .sm\:hover\:opacity-75:hover {
+  .group:hover .sm\:group-hover\:opacity-75 {
     opacity: 0.75;
   }
 
-  .sm\:hover\:opacity-100:hover {
-    opacity: 1;
-  }
-
-  .sm\:focus\:opacity-0:focus {
-    opacity: 0;
-  }
-
-  .sm\:focus\:opacity-25:focus {
-    opacity: 0.25;
-  }
-
-  .sm\:focus\:opacity-50:focus {
-    opacity: 0.5;
-  }
-
-  .sm\:focus\:opacity-75:focus {
-    opacity: 0.75;
-  }
-
-  .sm\:focus\:opacity-100:focus {
+  .group:hover .sm\:group-hover\:opacity-100 {
     opacity: 1;
   }
 
@@ -27870,6 +27990,162 @@ video {
   .sm\:z-auto {
     z-index: auto;
   }
+
+  .sm\:transition-none {
+    transition-property: none;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .sm\:transition-all {
+    transition-property: all;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .sm\:transition-color {
+    transition-property: color;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .sm\:transition-bg {
+    transition-property: background-color;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .sm\:transition-border {
+    transition-property: border-color;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .sm\:transition-colors {
+    transition-property: color, background-color, border-color;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .sm\:transition-opacity {
+    transition-property: opacity;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .sm\:transition-transform {
+    transition-property: transform;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .sm\:transition-filter {
+    transition-property: -webkit-filter;
+    transition-property: filter;
+    transition-property: filter, -webkit-filter;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .sm\:transition-0 {
+    --transition-duration: 0ms;
+    transition-duration: 0ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .sm\:transition-100 {
+    --transition-duration: 100ms;
+    transition-duration: 100ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .sm\:transition-250 {
+    --transition-duration: 250ms;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .sm\:transition-500 {
+    --transition-duration: 500ms;
+    transition-duration: 500ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .sm\:transition-750 {
+    --transition-duration: 750ms;
+    transition-duration: 750ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .sm\:transition-1000 {
+    --transition-duration: 1000ms;
+    transition-duration: 1000ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .sm\:transition-linear {
+    transition-timing-function: linear;
+  }
+
+  .sm\:transition-ease {
+    transition-timing-function: ease;
+  }
+
+  .sm\:transition-ease-in {
+    transition-timing-function: ease-in;
+  }
+
+  .sm\:transition-ease-out {
+    transition-timing-function: ease-out;
+  }
+
+  .sm\:transition-ease-in-out {
+    transition-timing-function: ease-in-out;
+  }
+
+  .sm\:transition-delay-0 {
+    transition-delay: 0ms;
+  }
+
+  .sm\:transition-delay-100 {
+    transition-delay: 100ms;
+  }
+
+  .sm\:transition-delay-250 {
+    transition-delay: 250ms;
+  }
+
+  .sm\:transition-delay-500 {
+    transition-delay: 500ms;
+  }
+
+  .sm\:transition-delay-750 {
+    transition-delay: 750ms;
+  }
+
+  .sm\:transition-delay-1000 {
+    transition-delay: 1000ms;
+  }
+
+  .sm\:will-change-auto {
+    will-change: auto;
+  }
+
+  .sm\:will-change-scroll {
+    will-change: scroll-position;
+  }
+
+  .sm\:will-change-contents {
+    will-change: contents;
+  }
+
+  .sm\:will-change-opacity {
+    will-change: opacity;
+  }
+
+  .sm\:will-change-transform {
+    will-change: transform;
+  }
 }
 
 @media (min-width: 768px) {
@@ -34326,43 +34602,23 @@ video {
     opacity: 1;
   }
 
-  .md\:hover\:opacity-0:hover {
+  .group:hover .md\:group-hover\:opacity-0 {
     opacity: 0;
   }
 
-  .md\:hover\:opacity-25:hover {
+  .group:hover .md\:group-hover\:opacity-25 {
     opacity: 0.25;
   }
 
-  .md\:hover\:opacity-50:hover {
+  .group:hover .md\:group-hover\:opacity-50 {
     opacity: 0.5;
   }
 
-  .md\:hover\:opacity-75:hover {
+  .group:hover .md\:group-hover\:opacity-75 {
     opacity: 0.75;
   }
 
-  .md\:hover\:opacity-100:hover {
-    opacity: 1;
-  }
-
-  .md\:focus\:opacity-0:focus {
-    opacity: 0;
-  }
-
-  .md\:focus\:opacity-25:focus {
-    opacity: 0.25;
-  }
-
-  .md\:focus\:opacity-50:focus {
-    opacity: 0.5;
-  }
-
-  .md\:focus\:opacity-75:focus {
-    opacity: 0.75;
-  }
-
-  .md\:focus\:opacity-100:focus {
+  .group:hover .md\:group-hover\:opacity-100 {
     opacity: 1;
   }
 
@@ -41349,6 +41605,162 @@ video {
   .md\:z-auto {
     z-index: auto;
   }
+
+  .md\:transition-none {
+    transition-property: none;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .md\:transition-all {
+    transition-property: all;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .md\:transition-color {
+    transition-property: color;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .md\:transition-bg {
+    transition-property: background-color;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .md\:transition-border {
+    transition-property: border-color;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .md\:transition-colors {
+    transition-property: color, background-color, border-color;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .md\:transition-opacity {
+    transition-property: opacity;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .md\:transition-transform {
+    transition-property: transform;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .md\:transition-filter {
+    transition-property: -webkit-filter;
+    transition-property: filter;
+    transition-property: filter, -webkit-filter;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .md\:transition-0 {
+    --transition-duration: 0ms;
+    transition-duration: 0ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .md\:transition-100 {
+    --transition-duration: 100ms;
+    transition-duration: 100ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .md\:transition-250 {
+    --transition-duration: 250ms;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .md\:transition-500 {
+    --transition-duration: 500ms;
+    transition-duration: 500ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .md\:transition-750 {
+    --transition-duration: 750ms;
+    transition-duration: 750ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .md\:transition-1000 {
+    --transition-duration: 1000ms;
+    transition-duration: 1000ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .md\:transition-linear {
+    transition-timing-function: linear;
+  }
+
+  .md\:transition-ease {
+    transition-timing-function: ease;
+  }
+
+  .md\:transition-ease-in {
+    transition-timing-function: ease-in;
+  }
+
+  .md\:transition-ease-out {
+    transition-timing-function: ease-out;
+  }
+
+  .md\:transition-ease-in-out {
+    transition-timing-function: ease-in-out;
+  }
+
+  .md\:transition-delay-0 {
+    transition-delay: 0ms;
+  }
+
+  .md\:transition-delay-100 {
+    transition-delay: 100ms;
+  }
+
+  .md\:transition-delay-250 {
+    transition-delay: 250ms;
+  }
+
+  .md\:transition-delay-500 {
+    transition-delay: 500ms;
+  }
+
+  .md\:transition-delay-750 {
+    transition-delay: 750ms;
+  }
+
+  .md\:transition-delay-1000 {
+    transition-delay: 1000ms;
+  }
+
+  .md\:will-change-auto {
+    will-change: auto;
+  }
+
+  .md\:will-change-scroll {
+    will-change: scroll-position;
+  }
+
+  .md\:will-change-contents {
+    will-change: contents;
+  }
+
+  .md\:will-change-opacity {
+    will-change: opacity;
+  }
+
+  .md\:will-change-transform {
+    will-change: transform;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -47805,43 +48217,23 @@ video {
     opacity: 1;
   }
 
-  .lg\:hover\:opacity-0:hover {
+  .group:hover .lg\:group-hover\:opacity-0 {
     opacity: 0;
   }
 
-  .lg\:hover\:opacity-25:hover {
+  .group:hover .lg\:group-hover\:opacity-25 {
     opacity: 0.25;
   }
 
-  .lg\:hover\:opacity-50:hover {
+  .group:hover .lg\:group-hover\:opacity-50 {
     opacity: 0.5;
   }
 
-  .lg\:hover\:opacity-75:hover {
+  .group:hover .lg\:group-hover\:opacity-75 {
     opacity: 0.75;
   }
 
-  .lg\:hover\:opacity-100:hover {
-    opacity: 1;
-  }
-
-  .lg\:focus\:opacity-0:focus {
-    opacity: 0;
-  }
-
-  .lg\:focus\:opacity-25:focus {
-    opacity: 0.25;
-  }
-
-  .lg\:focus\:opacity-50:focus {
-    opacity: 0.5;
-  }
-
-  .lg\:focus\:opacity-75:focus {
-    opacity: 0.75;
-  }
-
-  .lg\:focus\:opacity-100:focus {
+  .group:hover .lg\:group-hover\:opacity-100 {
     opacity: 1;
   }
 
@@ -54828,6 +55220,162 @@ video {
   .lg\:z-auto {
     z-index: auto;
   }
+
+  .lg\:transition-none {
+    transition-property: none;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .lg\:transition-all {
+    transition-property: all;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .lg\:transition-color {
+    transition-property: color;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .lg\:transition-bg {
+    transition-property: background-color;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .lg\:transition-border {
+    transition-property: border-color;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .lg\:transition-colors {
+    transition-property: color, background-color, border-color;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .lg\:transition-opacity {
+    transition-property: opacity;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .lg\:transition-transform {
+    transition-property: transform;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .lg\:transition-filter {
+    transition-property: -webkit-filter;
+    transition-property: filter;
+    transition-property: filter, -webkit-filter;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .lg\:transition-0 {
+    --transition-duration: 0ms;
+    transition-duration: 0ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .lg\:transition-100 {
+    --transition-duration: 100ms;
+    transition-duration: 100ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .lg\:transition-250 {
+    --transition-duration: 250ms;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .lg\:transition-500 {
+    --transition-duration: 500ms;
+    transition-duration: 500ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .lg\:transition-750 {
+    --transition-duration: 750ms;
+    transition-duration: 750ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .lg\:transition-1000 {
+    --transition-duration: 1000ms;
+    transition-duration: 1000ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .lg\:transition-linear {
+    transition-timing-function: linear;
+  }
+
+  .lg\:transition-ease {
+    transition-timing-function: ease;
+  }
+
+  .lg\:transition-ease-in {
+    transition-timing-function: ease-in;
+  }
+
+  .lg\:transition-ease-out {
+    transition-timing-function: ease-out;
+  }
+
+  .lg\:transition-ease-in-out {
+    transition-timing-function: ease-in-out;
+  }
+
+  .lg\:transition-delay-0 {
+    transition-delay: 0ms;
+  }
+
+  .lg\:transition-delay-100 {
+    transition-delay: 100ms;
+  }
+
+  .lg\:transition-delay-250 {
+    transition-delay: 250ms;
+  }
+
+  .lg\:transition-delay-500 {
+    transition-delay: 500ms;
+  }
+
+  .lg\:transition-delay-750 {
+    transition-delay: 750ms;
+  }
+
+  .lg\:transition-delay-1000 {
+    transition-delay: 1000ms;
+  }
+
+  .lg\:will-change-auto {
+    will-change: auto;
+  }
+
+  .lg\:will-change-scroll {
+    will-change: scroll-position;
+  }
+
+  .lg\:will-change-contents {
+    will-change: contents;
+  }
+
+  .lg\:will-change-opacity {
+    will-change: opacity;
+  }
+
+  .lg\:will-change-transform {
+    will-change: transform;
+  }
 }
 
 @media (min-width: 1280px) {
@@ -61284,43 +61832,23 @@ video {
     opacity: 1;
   }
 
-  .xl\:hover\:opacity-0:hover {
+  .group:hover .xl\:group-hover\:opacity-0 {
     opacity: 0;
   }
 
-  .xl\:hover\:opacity-25:hover {
+  .group:hover .xl\:group-hover\:opacity-25 {
     opacity: 0.25;
   }
 
-  .xl\:hover\:opacity-50:hover {
+  .group:hover .xl\:group-hover\:opacity-50 {
     opacity: 0.5;
   }
 
-  .xl\:hover\:opacity-75:hover {
+  .group:hover .xl\:group-hover\:opacity-75 {
     opacity: 0.75;
   }
 
-  .xl\:hover\:opacity-100:hover {
-    opacity: 1;
-  }
-
-  .xl\:focus\:opacity-0:focus {
-    opacity: 0;
-  }
-
-  .xl\:focus\:opacity-25:focus {
-    opacity: 0.25;
-  }
-
-  .xl\:focus\:opacity-50:focus {
-    opacity: 0.5;
-  }
-
-  .xl\:focus\:opacity-75:focus {
-    opacity: 0.75;
-  }
-
-  .xl\:focus\:opacity-100:focus {
+  .group:hover .xl\:group-hover\:opacity-100 {
     opacity: 1;
   }
 
@@ -68306,5 +68834,161 @@ video {
 
   .xl\:z-auto {
     z-index: auto;
+  }
+
+  .xl\:transition-none {
+    transition-property: none;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .xl\:transition-all {
+    transition-property: all;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .xl\:transition-color {
+    transition-property: color;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .xl\:transition-bg {
+    transition-property: background-color;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .xl\:transition-border {
+    transition-property: border-color;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .xl\:transition-colors {
+    transition-property: color, background-color, border-color;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .xl\:transition-opacity {
+    transition-property: opacity;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .xl\:transition-transform {
+    transition-property: transform;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .xl\:transition-filter {
+    transition-property: -webkit-filter;
+    transition-property: filter;
+    transition-property: filter, -webkit-filter;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .xl\:transition-0 {
+    --transition-duration: 0ms;
+    transition-duration: 0ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .xl\:transition-100 {
+    --transition-duration: 100ms;
+    transition-duration: 100ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .xl\:transition-250 {
+    --transition-duration: 250ms;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .xl\:transition-500 {
+    --transition-duration: 500ms;
+    transition-duration: 500ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .xl\:transition-750 {
+    --transition-duration: 750ms;
+    transition-duration: 750ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .xl\:transition-1000 {
+    --transition-duration: 1000ms;
+    transition-duration: 1000ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .xl\:transition-linear {
+    transition-timing-function: linear;
+  }
+
+  .xl\:transition-ease {
+    transition-timing-function: ease;
+  }
+
+  .xl\:transition-ease-in {
+    transition-timing-function: ease-in;
+  }
+
+  .xl\:transition-ease-out {
+    transition-timing-function: ease-out;
+  }
+
+  .xl\:transition-ease-in-out {
+    transition-timing-function: ease-in-out;
+  }
+
+  .xl\:transition-delay-0 {
+    transition-delay: 0ms;
+  }
+
+  .xl\:transition-delay-100 {
+    transition-delay: 100ms;
+  }
+
+  .xl\:transition-delay-250 {
+    transition-delay: 250ms;
+  }
+
+  .xl\:transition-delay-500 {
+    transition-delay: 500ms;
+  }
+
+  .xl\:transition-delay-750 {
+    transition-delay: 750ms;
+  }
+
+  .xl\:transition-delay-1000 {
+    transition-delay: 1000ms;
+  }
+
+  .xl\:will-change-auto {
+    will-change: auto;
+  }
+
+  .xl\:will-change-scroll {
+    will-change: scroll-position;
+  }
+
+  .xl\:will-change-contents {
+    will-change: contents;
+  }
+
+  .xl\:will-change-opacity {
+    will-change: opacity;
+  }
+
+  .xl\:will-change-transform {
+    will-change: transform;
   }
 }
