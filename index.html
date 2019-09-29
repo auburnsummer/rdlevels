@@ -1,181 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset='utf-8'>
-    <title>Rhythm Doctor Custom Levels</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./bundle.css">
+  <meta charset='utf-8'>
+  <title>Rhythm Doctor Custom Levels</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./bundle.css">
 </head>
 <body>
-    <div id="app" class="antialiased text-gray-900">
-        <!-- This div appears while loading.-->
-        <div v-if="state=='LOADING'" id="loading_state">
-            <p>Loading..</p>
-        </div>
-
-        <!-- This div appears when loaded. -->
-        <div v-if="state=='LOADED'" id="loaded_state">
-            <!-- top bar TEMPORARY -->
-            <div class='inset-x-0 top-0 bg-gray-400 w-full flex flex-col md:flex-row'>
-                <ul class="flex float-left list-reset border border-grey-light rounded w-auto font-sans">
-                    <li v-on:click="switchPage(1)" v-show="currentPage > 3"><a class="block border-r border-grey-light px-3 py-2" href="#">1</a></li>
-                    <li v-on:click="switchPage(currentPage-2)" v-show="currentPage-1 > 1"><a class="block border-r border-grey-light px-3 py-2" href="#">{{currentPage-2}}</a></li>
-                    <li v-on:click="switchPage(currentPage-1)" v-show="currentPage > 1"><a class="block border-r border-grey-light px-3 py-2" href="#">{{currentPage-1}}</a></li>
-                    <li><a class="block border-r border-grey-light bg-gray-600 px-3 py-2" href="#">{{currentPage}}</a></li>
-                    <li v-on:click="switchPage(currentPage+1)" v-show="currentPage < numberOfPages"><a class="block border-r border-grey-light px-3 py-2" href="#">{{currentPage+1}}</a></li>
-                    <li v-on:click="switchPage(currentPage+2)" v-show="currentPage+1 < numberOfPages"><a class="block border-r border-grey-light px-3 py-2" href="#">{{currentPage+2}}</a></li>
-                    <li v-on:click="switchPage(numberOfPages)" v-show="currentPage+2 < numberOfPages"><a class="block border-r border-grey-light px-3 py-2" href="#">{{numberOfPages}}</a></li>
-                </ul>
-                <p>Levels per page:</p>
-                <select v-model.number="limit">
-                    <option>5</option>
-                    <option selected>10</option>
-                    <option>25</option>
-                    <option>50</option>
-                    <option>100</option>
-                    <option>9999</option>
-                </select>
-                <p>Sort by:</p>
-                <select v-model="sort_by">
-                    <option value="score" hidden>Relevance</option>
-                    <option value="last_updated">Publish date</option>
-                    <option value="song">Song title</option>
-                    <option value="difficulty">Difficulty</option>
-                    <option value="author">Creator</option>
-                </select>
-                <input type="radio" v-model="display_type" name="display-type" id="display-cards" value="cards">
-                <label for="display-cards">Cards</label>
-                <input type="radio" v-model="display_type" name="display-type" id="display-list" value="list">
-                <label for="display-list">List</label>
-
-            </div>
-
-            <!-- CARDS DISPLAY -->
-            <div v-show="display_type == 'cards'" id="levels-cards" class="w-full justify-center mx-auto flex flex-row flex-wrap items-stretch">
-                <!-- each card starts here -->
-                <div 
-                v-for="(level,index) in truncated"
-                v-bind:key="level"
-                class="flex-1 flex flex-col 
-                       min-w-72 max-w-sm m-2
-                       bg-gray-200
-                       rounded-lg shadow-md hover:shadow-lg transition-shadow
-                       group">
-
-                    <!-- image -->
-                    <div class="relative pb-9/16 bg-gray-400 rounded-t-lg overflow-hidden">
-                        
-                        <img class="group-hover:defocus transition-filter absolute h-full w-full rounded-t-lg object-cover" :src="level.preview_img">
-                        
-                        <!-- overlay -->
-                        <div 
-                        class="opacity-0 group-hover:opacity-100 transition-opacity
-                               absolute flex h-full w-full p-4 rounted-t-lg">
-                            <!-- description -->
-                            <div class="flex-initial w-full text-white text-sm overflow-y-auto break-words"
-                            v-html="convertToHtml(level.description)">
-                            </div>
-                            <!-- download + copy link buttons -->
-                            <div class="flex-none w-8 ml-2 flex flex-col">
-                                <a :data-clipboard-text="level.download_url" class="copy-link text-white border border-white rounded-lg hover:bg-gray-600 hover:cursor-pointer">
-                                    <svg class="h-full w-full p-2 fill-current" aria-hidden="true" data-prefix="fas" data-icon="copy" class="svg-inline--fa fa-copy fa-w-14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                        <path fill="currentColor" d="M320 448v40a24 24 0 0 1-24 24H24a24 24 0 0 1-24-24V120a24 24 0 0 1 24-24h72v296c0 30.88 25.12 56 56 56h168zm0-344V0H152a24 24 0 0 0-24 24v368a24 24 0 0 0 24 24h272a24 24 0 0 0 24-24V128H344c-13.2 0-24-10.8-24-24zm120.97-31.03L375.03 7.03A24 24 0 0 0 358.06 0H352v96h96v-6.06a24 24 0 0 0-7.03-16.97z"/>
-                                    </svg>
-                                </a>
-                                <a :href="level.download_url" class="mt-4 text-white border border-white rounded-lg hover:bg-gray-600">
-                                    <svg class="h-full w-full p-2 fill-current" aria-hidden="true" data-prefix="fas" data-icon="download" class="svg-inline--fa fa-download fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                        <path fill="currentColor" d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49a51.24 51.24 0 0 0 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"/>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                        
-                    </div>
-
-                    <!-- div for everything below the image -->
-                    <div class="p-4">
-                        <!-- artist + song -->
-                        <h2 class="text-gray-700 text-xs leading-cramped">{{level.artist}}</h2>
-                        <h1 class="font-semibold text-lg leading-tight">{{level.song}}</h1>
-                        
-                        <!-- icons + metadata -->
-                        <div class="flex flex-wrap gap gap-x-3">
-                            <div class="flex items-center text-gray-700 text-xs">
-                                    <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="pencil-alt" class="svg-inline--fa fa-pencil-alt fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                        <path fill="currentColor" d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3 0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9 0l60.1 60.1a47.92 47.92 0 0 1 0 67.9zM284.2 99.8L21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3 0-17l-111-111c-4.8-4.7-12.4-4.7-17.1 0zM124.1 339.9c-5.5-5.5-5.5-14.3 0-19.8l154-154c5.5-5.5 14.3-5.5 19.8 0s5.5 14.3 0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8 0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"/>
-                                    </svg>
-                                <p class="ml-1">{{level.author}}
-                                </p>
-                            </div>
-                            <div class="flex items-center text-gray-700 text-xs">
-                                <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="syringe" class="svg-inline--fa fa-syringe fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                    <path fill="currentColor" d="M201.5 174.8l55.7 55.8c3.1 3.1 3.1 8.2 0 11.3l-11.3 11.3a8.03 8.03 0 0 1-11.3 0l-55.7-55.8-45.3 45.3 55.8 55.8c3.1 3.1 3.1 8.2 0 11.3l-11.3 11.3a8.03 8.03 0 0 1-11.3 0L111 265.2l-26.4 26.4a79.9 79.9 0 0 0-23 65.4l7.1 63.6L2.3 487a8.03 8.03 0 0 0 0 11.3l11.3 11.3c3.1 3.1 8.2 3.1 11.3 0l66.3-66.3 63.6 7.1c23.9 2.6 47.9-5.4 65.4-23l181.9-181.9-135.7-135.7-64.9 65zm308.2-93.3L430.5 2.3a8.03 8.03 0 0 0-11.3 0l-11.3 11.3a8.03 8.03 0 0 0 0 11.3l28.3 28.3-45.3 45.3-56.6-56.6-17-17a8.03 8.03 0 0 0-11.3 0l-33.9 33.9a8.03 8.03 0 0 0 0 11.3l17 17L424.8 223l17 17c3.1 3.1 8.2 3.1 11.3 0l33.9-34c3.1-3.1 3.1-8.2 0-11.3l-73.5-73.5 45.3-45.3 28.3 28.3c3.1 3.1 8.2 3.1 11.3 0l11.3-11.3c3.1-3.2 3.1-8.2 0-11.4z"/>
-                                </svg>
-                                <p class="ml-1">{{level.difficulty}}
-                                </p>
-                            </div>
-                            <div class="flex items-center text-gray-700 text-xs">
-                                <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="heartbeat" class="svg-inline--fa fa-heartbeat fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                    <path d="M320.2 243.8l-49.7 99.4c-6 12.1-23.4 11.7-28.9-.6l-56.9-126.3-30 71.7H60.6l182.5 186.5c7.1 7.3 18.6 7.3 25.7 0L451.4 288H342.3l-22.1-44.2zM473.7 73.9l-2.4-2.5c-51.5-52.6-135.8-52.6-187.4 0L256 100l-27.9-28.5a130.83 130.83 0 0 0-187.4 0l-2.4 2.4C-10.4 123.7-12.5 203 31 256h102.4l35.9-86.2c5.4-12.9 23.6-13.2 29.4-.4l58.2 129.3 49-97.9c5.9-11.8 22.7-11.8 28.6 0l27.6 55.2H481c43.5-53 41.4-132.3-7.3-182.1z"/>
-                                </svg>
-                                <p class="ml-1">{{getBPMText(level.min_bpm, level.max_bpm)}} BPM
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- spacer -->
-                        <div class="flex-grow">
-
-                        </div>
-                        
-                        <div class="flex flex-wrap items-end mt-2 relative h-auto gap gap-2">
-                            <!-- epilepsy warning / starred -->
-                            <div v-show="level.seizure_warning" class="flex items-center bg-orange-200 rounded-full px-3 text-xs font-semibold">
-                                <svg class="h-3 w-3 fill-current text-orange-400" aria-hidden="true" data-prefix="fas" data-icon="exclamation-triangle" class="svg-inline--fa fa-exclamation-triangle fa-w-18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                                    <path fill="currentColor" d="M569.52 440.01c18.46 32-4.71 71.99-41.58 71.99H48.05c-36.93 0-60-40.05-41.57-71.99L246.42 24c18.47-32.01 64.72-31.96 83.16 0L569.52 440zM288 354a46 46 0 1 0 0 92 46 46 0 0 0 0-92zm-43.67-165.35l7.41 136A12 12 0 0 0 263.74 336h48.54a12 12 0 0 0 11.98-11.35l7.42-136A12 12 0 0 0 319.7 176h-63.38a12 12 0 0 0-11.98 12.65z"/>
-                                </svg>
-                                <span 
-                                class="inline-block ml-1 text-orange-500"
-                                >
-                                    Seizure warning
-                                </span>
-                            </div>
-                            <div v-show="level.starred" class="flex items-baseline bg-teal-200 rounded-full px-3 text-xs font-semibold">
-                                    <svg class="h-3 w-3 fill-current text-teal-400" aria-hidden="true" data-prefix="fas" data-icon="stars" class="svg-inline--fa fa-stars fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                        <path fill="currentColor" d="M336 160l26.7-53.3L416 80l-53.3-26.7L336 0l-26.7 53.3L256 80l53.3 26.7L336 160zm144 32l-16-32-16 32-32 16 32 16 16 32 16-32 32-16-32-16zm-115.7 75.3L259.5 252l-46.9-95.2c-8.4-17-32.7-17.2-41.2 0L124.5 252 19.7 267.3C.9 270-6.7 293.2 7 306.5l75.9 74-18 104.6c-3.2 18.9 16.7 33.1 33.3 24.2l93.8-49.4 93.8 49.4c16.7 8.8 36.5-5.3 33.3-24.2l-17.9-104.6 75.9-74c13.6-13.3 6-36.5-12.8-39.2z"/>
-                                    </svg>
-                                    <span 
-                                    class="inline-block ml-1 text-teal-500"
-                                    >
-                                        Starred
-                                    </span>
-                                </div>
-                            <!-- tags -->
-                            <span 
-                            v-for="tag in level.tags" 
-                            class="inline-block bg-gray-300 rounded-full px-3 text-xs font-semibold text-gray-600"
-                            >
-                            {{tag}}
-                            </span>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div> <!-- end card display -->
-
-            <div v-show="display_type == 'list'" id="levels-list">
-                <p>Hi i'm the list display i guess</p>
-            </div>
-        </div>
-
-        <!-- This div appears in an error. -->
-        <div v-if="state=='ERROR'" id="error_state">
-            <p>Error when loading the Rhythm Doctor API! ping ladybug now!!</p>
-            <p>{{error}}</p>
-        </div>
+  <div id="app" class="antialiased text-gray-900 font-sans">
+    <!-- This div appears while loading.-->
+    <div v-if="state=='LOADING'" id="loading_state">
+      <p>Loading..</p>
     </div>
 
-    <script src="bundle.js"></script>
+    <!-- This div appears when loaded. -->
+    <div v-if="state=='LOADED'" id="loaded_state">
+      <!-- top bar TEMPORARY -->
+      <div class='inset-x-0 top-0 bg-gray-400 w-full flex flex-col md:flex-row'>
+        <ul class="flex float-left list-reset border border-grey-light rounded w-auto font-sans">
+          <li v-on:click="switchPage(1)" v-show="currentPage > 3"><a class="block border-r border-grey-light px-3 py-2" href="#">1</a></li>
+          <li v-on:click="switchPage(currentPage-2)" v-show="currentPage-1 > 1"><a class="block border-r border-grey-light px-3 py-2" href="#">{{currentPage-2}}</a></li>
+          <li v-on:click="switchPage(currentPage-1)" v-show="currentPage > 1"><a class="block border-r border-grey-light px-3 py-2" href="#">{{currentPage-1}}</a></li>
+          <li><a class="block border-r border-grey-light bg-gray-600 px-3 py-2" href="#">{{currentPage}}</a></li>
+          <li v-on:click="switchPage(currentPage+1)" v-show="currentPage < numberOfPages"><a class="block border-r border-grey-light px-3 py-2" href="#">{{currentPage+1}}</a></li>
+          <li v-on:click="switchPage(currentPage+2)" v-show="currentPage+1 < numberOfPages"><a class="block border-r border-grey-light px-3 py-2" href="#">{{currentPage+2}}</a></li>
+          <li v-on:click="switchPage(numberOfPages)" v-show="currentPage+2 < numberOfPages"><a class="block border-r border-grey-light px-3 py-2" href="#">{{numberOfPages}}</a></li>
+        </ul>
+        <p>Levels per page:</p>
+        <select v-model.number="limit">
+          <option>5</option>
+          <option selected>10</option>
+          <option>25</option>
+          <option>50</option>
+          <option>100</option>
+          <option>9999</option>
+        </select>
+        <p>Sort by:</p>
+        <select v-model="sort_by">
+          <option value="score" hidden>Relevance</option>
+          <option value="last_updated">Publish date</option>
+          <option value="song">Song title</option>
+          <option value="difficulty">Difficulty</option>
+          <option value="author">Creator</option>
+        </select>
+        <input type="radio" v-model="display_type" name="display-type" id="display-cards" value="cards">
+        <label for="display-cards">Cards</label>
+        <input type="radio" v-model="display_type" name="display-type" id="display-list" value="list">
+        <label for="display-list">List</label>
+
+      </div>
+
+      <!-- CARDS DISPLAY -->
+      <div v-show="display_type == 'cards'" id="levels-cards" 
+      class="w-full justify-center mx-auto flex flex-row flex-wrap items-stretch md:px-8 lg:px-16">
+        <!-- each card starts here -->
+        <div 
+        v-for="(level,index) in truncated"
+        v-bind:key="level"
+        class="flex-1 flex flex-col 
+             min-w-72 max-w-sm m-2
+             bg-gray-200
+             rounded-lg shadow-md hover:shadow-lg transition-shadow
+             group">
+
+          <!-- image -->
+          <div class="relative pb-9/16 bg-gray-400 rounded-t-lg overflow-hidden">
+            
+            <img class="group-hover:defocus transition-filter absolute h-full w-full rounded-t-lg object-cover" :src="level.preview_img">
+            
+            <!-- overlay -->
+            <div 
+            class="opacity-0 group-hover:opacity-100 transition-opacity
+                 absolute flex h-full w-full p-4 rounted-t-lg">
+              <!-- description -->
+              <div class="flex-initial w-full text-white text-sm overflow-y-auto break-words"
+              v-html="convertToHtml(level.description)">
+              </div>
+              <!-- download + copy link buttons -->
+              <div class="flex-none w-8 ml-2 flex flex-col">
+                <a :data-clipboard-text="level.download_url" class="copy-link text-white border border-white rounded-lg hover:bg-gray-600 hover:cursor-pointer">
+                  <svg class="h-full w-full p-2 fill-current" aria-hidden="true" data-prefix="fas" data-icon="copy" class="svg-inline--fa fa-copy fa-w-14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path fill="currentColor" d="M320 448v40a24 24 0 0 1-24 24H24a24 24 0 0 1-24-24V120a24 24 0 0 1 24-24h72v296c0 30.88 25.12 56 56 56h168zm0-344V0H152a24 24 0 0 0-24 24v368a24 24 0 0 0 24 24h272a24 24 0 0 0 24-24V128H344c-13.2 0-24-10.8-24-24zm120.97-31.03L375.03 7.03A24 24 0 0 0 358.06 0H352v96h96v-6.06a24 24 0 0 0-7.03-16.97z"/>
+                  </svg>
+                </a>
+                <a :href="level.download_url" class="mt-4 text-white border border-white rounded-lg hover:bg-gray-600">
+                  <svg class="h-full w-full p-2 fill-current" aria-hidden="true" data-prefix="fas" data-icon="download" class="svg-inline--fa fa-download fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path fill="currentColor" d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49a51.24 51.24 0 0 0 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            
+          </div>
+
+          <!-- div for everything below the image -->
+          <div class="p-4 h-full flex flex-col justify-between">
+            <!-- aligned up -->
+            <div>
+              <!-- artist + song -->
+              <h2 class="text-gray-700 text-xs leading-cramped">{{level.artist}}</h2>
+              <h1 class="font-semibold text-lg leading-tight">{{level.song}}</h1>
+              
+              <!-- icons + metadata -->
+              <div class="flex flex-wrap gap gap-x-3 mt-1">
+                <div class="flex items-center text-gray-700 text-xs">
+                    <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="pencil-alt" class="svg-inline--fa fa-pencil-alt fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                      <path fill="currentColor" d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3 0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9 0l60.1 60.1a47.92 47.92 0 0 1 0 67.9zM284.2 99.8L21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3 0-17l-111-111c-4.8-4.7-12.4-4.7-17.1 0zM124.1 339.9c-5.5-5.5-5.5-14.3 0-19.8l154-154c5.5-5.5 14.3-5.5 19.8 0s5.5 14.3 0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8 0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"/>
+                    </svg>
+                  <p class="ml-1">{{level.author}}
+                  </p>
+                </div>
+                <div class="flex items-center text-gray-700 text-xs">
+                  <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="syringe" class="svg-inline--fa fa-syringe fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path fill="currentColor" d="M201.5 174.8l55.7 55.8c3.1 3.1 3.1 8.2 0 11.3l-11.3 11.3a8.03 8.03 0 0 1-11.3 0l-55.7-55.8-45.3 45.3 55.8 55.8c3.1 3.1 3.1 8.2 0 11.3l-11.3 11.3a8.03 8.03 0 0 1-11.3 0L111 265.2l-26.4 26.4a79.9 79.9 0 0 0-23 65.4l7.1 63.6L2.3 487a8.03 8.03 0 0 0 0 11.3l11.3 11.3c3.1 3.1 8.2 3.1 11.3 0l66.3-66.3 63.6 7.1c23.9 2.6 47.9-5.4 65.4-23l181.9-181.9-135.7-135.7-64.9 65zm308.2-93.3L430.5 2.3a8.03 8.03 0 0 0-11.3 0l-11.3 11.3a8.03 8.03 0 0 0 0 11.3l28.3 28.3-45.3 45.3-56.6-56.6-17-17a8.03 8.03 0 0 0-11.3 0l-33.9 33.9a8.03 8.03 0 0 0 0 11.3l17 17L424.8 223l17 17c3.1 3.1 8.2 3.1 11.3 0l33.9-34c3.1-3.1 3.1-8.2 0-11.3l-73.5-73.5 45.3-45.3 28.3 28.3c3.1 3.1 8.2 3.1 11.3 0l11.3-11.3c3.1-3.2 3.1-8.2 0-11.4z"/>
+                  </svg>
+                  <p class="ml-1">{{level.difficulty}}
+                  </p>
+                </div>
+                <div class="flex items-center text-gray-700 text-xs">
+                  <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="heartbeat" class="svg-inline--fa fa-heartbeat fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M320.2 243.8l-49.7 99.4c-6 12.1-23.4 11.7-28.9-.6l-56.9-126.3-30 71.7H60.6l182.5 186.5c7.1 7.3 18.6 7.3 25.7 0L451.4 288H342.3l-22.1-44.2zM473.7 73.9l-2.4-2.5c-51.5-52.6-135.8-52.6-187.4 0L256 100l-27.9-28.5a130.83 130.83 0 0 0-187.4 0l-2.4 2.4C-10.4 123.7-12.5 203 31 256h102.4l35.9-86.2c5.4-12.9 23.6-13.2 29.4-.4l58.2 129.3 49-97.9c5.9-11.8 22.7-11.8 28.6 0l27.6 55.2H481c43.5-53 41.4-132.3-7.3-182.1z"/>
+                  </svg>
+                  <p class="ml-1">{{getBPMText(level.min_bpm, level.max_bpm)}} BPM
+                  </p>
+                </div>
+              </div>
+            </div>
+             
+
+            
+            <div class="flex flex-wrap items-end mt-2 relative h-auto gap gap-2">
+              <!-- epilepsy warning / starred -->
+              <div v-show="level.seizure_warning" class="flex items-center bg-orange-200 rounded-full px-3 text-xs font-semibold">
+                <svg class="h-3 w-3 fill-current text-orange-400" aria-hidden="true" data-prefix="fas" data-icon="exclamation-triangle" class="svg-inline--fa fa-exclamation-triangle fa-w-18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                  <path fill="currentColor" d="M569.52 440.01c18.46 32-4.71 71.99-41.58 71.99H48.05c-36.93 0-60-40.05-41.57-71.99L246.42 24c18.47-32.01 64.72-31.96 83.16 0L569.52 440zM288 354a46 46 0 1 0 0 92 46 46 0 0 0 0-92zm-43.67-165.35l7.41 136A12 12 0 0 0 263.74 336h48.54a12 12 0 0 0 11.98-11.35l7.42-136A12 12 0 0 0 319.7 176h-63.38a12 12 0 0 0-11.98 12.65z"/>
+                </svg>
+                <span class="inline-block ml-1 text-orange-500">
+                  Seizure warning
+                </span>
+              </div>
+              <div v-show="level.starred" class="flex items-baseline bg-teal-200 rounded-full px-3 text-xs font-semibold">
+                  <svg class="h-3 w-3 fill-current text-teal-400" aria-hidden="true" data-prefix="fas" data-icon="stars" class="svg-inline--fa fa-stars fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path fill="currentColor" d="M336 160l26.7-53.3L416 80l-53.3-26.7L336 0l-26.7 53.3L256 80l53.3 26.7L336 160zm144 32l-16-32-16 32-32 16 32 16 16 32 16-32 32-16-32-16zm-115.7 75.3L259.5 252l-46.9-95.2c-8.4-17-32.7-17.2-41.2 0L124.5 252 19.7 267.3C.9 270-6.7 293.2 7 306.5l75.9 74-18 104.6c-3.2 18.9 16.7 33.1 33.3 24.2l93.8-49.4 93.8 49.4c16.7 8.8 36.5-5.3 33.3-24.2l-17.9-104.6 75.9-74c13.6-13.3 6-36.5-12.8-39.2z"/>
+                  </svg>
+                  <span class="inline-block ml-1 text-teal-500">
+                    Starred
+                  </span>
+                </div>
+              <!-- tags -->
+              <span 
+              v-for="tag in level.tags" 
+              class="inline-block bg-gray-300 rounded-full px-3 text-xs font-semibold text-gray-600"
+              >
+              {{tag}}
+              </span>
+            </div>
+            
+          </div>
+        </div>
+      </div> <!-- end card display -->
+
+      <div v-show="display_type == 'list'" id="levels-list">
+        <p>Hi i'm the list display i guess</p>
+      </div>
+    </div>
+
+    <!-- This div appears in an error. -->
+    <div v-if="state=='ERROR'" id="error_state">
+      <p>Error when loading the Rhythm Doctor API! ping ladybug now!!</p>
+      <p>{{error}}</p>
+    </div>
+  </div>
+
+  <script src="bundle.js"></script>
 </body>
 
 </html>

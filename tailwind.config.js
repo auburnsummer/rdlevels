@@ -69,6 +69,9 @@ module.exports = {
         'filter': 'filter',
         'shadow': 'box-shadow'
       },
+    },
+    fontFamily: {
+      'sans': ['Nunito', 'sans-serif']
     }
   },
   variants: {
