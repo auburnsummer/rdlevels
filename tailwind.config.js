@@ -66,7 +66,8 @@ module.exports = {
         'colors': ['color', 'background-color', 'border-color'],
         'opacity': 'opacity',
         'transform': 'transform',
-        'filter': 'filter'
+        'filter': 'filter',
+        'shadow': 'box-shadow'
       },
     }
   },

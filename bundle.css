@@ -14433,6 +14433,12 @@ video {
   transition-duration: var(--transition-duration);
 }
 
+.transition-shadow {
+  transition-property: box-shadow;
+  transition-duration: 250ms;
+  transition-duration: var(--transition-duration);
+}
+
 .transition-0 {
   --transition-duration: 0ms;
   transition-duration: 0ms;
@@ -28043,6 +28049,12 @@ video {
     transition-property: -webkit-filter;
     transition-property: filter;
     transition-property: filter, -webkit-filter;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .sm\:transition-shadow {
+    transition-property: box-shadow;
     transition-duration: 250ms;
     transition-duration: var(--transition-duration);
   }
@@ -41662,6 +41674,12 @@ video {
     transition-duration: var(--transition-duration);
   }
 
+  .md\:transition-shadow {
+    transition-property: box-shadow;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
   .md\:transition-0 {
     --transition-duration: 0ms;
     transition-duration: 0ms;
@@ -55277,6 +55295,12 @@ video {
     transition-duration: var(--transition-duration);
   }
 
+  .lg\:transition-shadow {
+    transition-property: box-shadow;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
   .lg\:transition-0 {
     --transition-duration: 0ms;
     transition-duration: 0ms;
@@ -68888,6 +68912,12 @@ video {
     transition-property: -webkit-filter;
     transition-property: filter;
     transition-property: filter, -webkit-filter;
+    transition-duration: 250ms;
+    transition-duration: var(--transition-duration);
+  }
+
+  .xl\:transition-shadow {
+    transition-property: box-shadow;
     transition-duration: 250ms;
     transition-duration: var(--transition-duration);
   }
