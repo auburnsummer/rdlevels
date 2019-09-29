@@ -54,8 +54,8 @@
                 <!-- each card starts here -->
                 <div 
                 v-for="(level,index) in truncated"
-                class="flex-auto flex flex-col 
-                       w-84 max-w-sm m-2
+                class="flex-grow flex flex-col 
+                       min-w-84 max-w-sm m-2
                        bg-gray-200
                        rounded-lg shadow-lg
                        group">
@@ -64,11 +64,12 @@
                     <div class="relative pb-9/16 bg-gray-400 rounded-t-lg overflow-hidden">
                         <img class="group-hover:defocus absolute h-full w-full rounded-t-lg object-cover" :src="level.preview_img">
                         
-                        <div class="invisible group-hover:visible absolute flex h-full w-full p-2 rounted-t-lg">
-                            <div class="flex-none w-5/6 p-2 text-white text-sm overflow-y-auto"
+                        <!-- overlay -->
+                        <div class="invisible group-hover:visible absolute flex h-full w-full p-4 rounted-t-lg">
+                            <div class="flex-initial w-full text-white text-sm overflow-y-auto break-words"
                             v-html="convertToHtml(level.description)">
                             </div>
-                            <div class="flex-none w-1/6 p-2 flex flex-col">
+                            <div class="flex-none w-8 ml-2 flex flex-col">
                                 <a :data-clipboard-text="level.download_url" class="copy-link text-white border border-white rounded-lg hover:bg-gray-600 hover:cursor-pointer">
                                     <svg class="h-full w-full p-2 fill-current" aria-hidden="true" data-prefix="fas" data-icon="copy" class="svg-inline--fa fa-copy fa-w-14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                         <path fill="currentColor" d="M320 448v40a24 24 0 0 1-24 24H24a24 24 0 0 1-24-24V120a24 24 0 0 1 24-24h72v296c0 30.88 25.12 56 56 56h168zm0-344V0H152a24 24 0 0 0-24 24v368a24 24 0 0 0 24 24h272a24 24 0 0 0 24-24V128H344c-13.2 0-24-10.8-24-24zm120.97-31.03L375.03 7.03A24 24 0 0 0 358.06 0H352v96h96v-6.06a24 24 0 0 0-7.03-16.97z"/>
@@ -114,40 +115,37 @@
                                 </p>
                             </div>
                         </div>
-                        
-                        <!-- level description 
-                        <p class="mt-2 text-sm" v-html="convertToHtml(level.description)">
-                        </p>
-                        -->
 
                         <!-- spacer -->
                         <div class="flex-grow">
 
                         </div>
                         
-                        <!-- download and copy link buttons
-                        <div class="flex">
-                            <a 
-                            class="flex-auto bg-gray-300 px-6 py-2 ml-6 w-1/2 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center"
-                            :href="level.download_url"
-                            >
-                                <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
-                                <span>Download</span>
-                            </a>
-                            <a 
-                            class="copy-link flex-auto bg-gray-300 px-6 py-2 ml-6 w-1/2 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center"
-                            :data-clipboard-text="level.download_url"
-                            >
-                                <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
-                                <span>Copy link</span>
-                            </a>
-                        </div>
-                        -->
                         
-                        <div class="flex flex-wrap items-end mt-2 relative h-auto">
+                        <div class="flex flex-wrap items-end mt-2 relative h-auto gap gap-2">
+                            <div v-show="level.seizure_warning" class="flex items-center bg-red-300 rounded-full px-3 text-xs font-semibold text-white">
+                                <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="exclamation-triangle" class="svg-inline--fa fa-exclamation-triangle fa-w-18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                    <path fill="currentColor" d="M569.52 440.01c18.46 32-4.71 71.99-41.58 71.99H48.05c-36.93 0-60-40.05-41.57-71.99L246.42 24c18.47-32.01 64.72-31.96 83.16 0L569.52 440zM288 354a46 46 0 1 0 0 92 46 46 0 0 0 0-92zm-43.67-165.35l7.41 136A12 12 0 0 0 263.74 336h48.54a12 12 0 0 0 11.98-11.35l7.42-136A12 12 0 0 0 319.7 176h-63.38a12 12 0 0 0-11.98 12.65z"/>
+                                </svg>
+                                <span 
+                                class="inline-block ml-1"
+                                >
+                                    Epilepsy warning
+                                </span>
+                            </div>
+                            <div v-show="level.starred" class="flex items-center bg-yellow-600 rounded-full px-3 text-xs font-semibold text-white">
+                                    <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="stars" class="svg-inline--fa fa-stars fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                        <path fill="currentColor" d="M336 160l26.7-53.3L416 80l-53.3-26.7L336 0l-26.7 53.3L256 80l53.3 26.7L336 160zm144 32l-16-32-16 32-32 16 32 16 16 32 16-32 32-16-32-16zm-115.7 75.3L259.5 252l-46.9-95.2c-8.4-17-32.7-17.2-41.2 0L124.5 252 19.7 267.3C.9 270-6.7 293.2 7 306.5l75.9 74-18 104.6c-3.2 18.9 16.7 33.1 33.3 24.2l93.8-49.4 93.8 49.4c16.7 8.8 36.5-5.3 33.3-24.2l-17.9-104.6 75.9-74c13.6-13.3 6-36.5-12.8-39.2z"/>
+                                    </svg>
+                                    <span 
+                                    class="inline-block ml-1"
+                                    >
+                                        Starred
+                                    </span>
+                                </div>
                             <span 
                             v-for="tag in level.tags" 
-                            class="inline-block bg-gray-400 rounded-full px-3 mt-2 text-xs font-semibold text-gray-700 mr-2"
+                            class="inline-block bg-gray-400 rounded-full px-3 text-xs font-semibold text-gray-700"
                             >
                             {{tag}}
                             </span>

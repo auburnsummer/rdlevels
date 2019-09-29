@@ -49,11 +49,20 @@ module.exports = {
         '7': '1.75rem',
         '8': '2rem',
       },
+      minWidth: {
+        '0': '0',
+        '64': '16rem',
+        '72': '18rem',
+        '80': '20rem',
+        '84': '21rem',
+        'full': '100%',
+      }
     }
   },
   variants: {
     visibility: ['responsive', 'group-hover'],
-    defocus: ['group-hover']
+    defocus: ['group-hover'],
+    cursor: ['responsive', 'hover', 'focus']
   },
   plugins: [
     require('@tailwindcss/custom-forms'),
