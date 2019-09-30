@@ -81,9 +81,17 @@ var app = new Vue({
     methods: {
       fireSearchQuery: function() {
         this.worker.postMessage(['search', this.target, this.searchQuery]);
+        if (this.searchQuery === '' && this.sort_by === 'score') {
+          this.sort_by = 'last_updated';
+          this.sort_direction = 'ascending';
+        }
       },
       searchCallback: function(e) {
         this.search_results = e.data;
+        if (this.searchQuery != '') {
+          this.sort_by = 'score';
+          this.sort_direction = 'ascending';
+        }
       },
       sorted: function(data) {
         let reverse = (func) => {
@@ -148,6 +156,12 @@ var app = new Vue({
           return max_bpm;
         }
         return `${min_bpm}-${max_bpm}`
+      },
+      getDifficultyText : function(diff) {
+        if (diff === 'VeryTough') {
+          return 'Very Tough';
+        }
+        return diff;
       }
     },
     mounted: function () {

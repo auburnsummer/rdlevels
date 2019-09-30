@@ -5,7 +5,7 @@ var _ = require('lodash');
 const fuse_options = {
     shouldSort: false,
     includeScore: true,
-    threshold: 0.5,
+    threshold: 0.4,
     location: 0,
     distance: 100,
     maxPatternLength: 32,
@@ -18,11 +18,6 @@ const fuse_options = {
       {name:"tags",weight:0.08}
     ]                   
 };
-
-var init = (self, packet) => {
-    console.log("I am the init!");
-    self.data = packet.data;
-}
 
 const do_search = (fuse, query) => {
     let result = fuse.search(query);
@@ -39,8 +34,12 @@ module.exports = function (self) {
         console.log(ev.data);
         let result;
         if (ev.data[0] === 'search') {
-            let fuse = new Fuse(ev.data[1], fuse_options);
-            result = do_search(fuse, ev.data[2]);
+            if (ev.data[2] === '') {
+                result = ev.data[1];
+            } else {
+                let fuse = new Fuse(ev.data[1], fuse_options);
+                result = do_search(fuse, ev.data[2]);
+            }
         }
         console.log(result);
         self.postMessage(result);
