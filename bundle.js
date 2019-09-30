@@ -64,7 +64,7 @@ var app = new Vue({
           'descending': 'hardest'
         }
       },
-      trayOpen: true
+      trayOpen: false
     }, 
     computed: {
       sorted: function() {
