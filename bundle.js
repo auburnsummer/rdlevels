@@ -31,12 +31,49 @@ var app = new Vue({
       state: 'LOADING', // initial state
       error: null,
       limit: 10,
+      limit_options: [
+        { text: '10', value: 10 },
+        { text: '25', value: 25 },
+        { text: '50', value: 50 },
+        { text: '100', value: 100 },
+        { text: 'All', value: 9999 },
+      ],
       startIndex: 0,
       sort_by: 'last_updated',
+      sort_direction: 'ascending',
       display_type: 'cards',
+      order_texts: {
+        'score': {
+          'ascending': 'most relevant',
+          'desecending': 'least relevant'
+        },
+        'last_updated': {
+          'ascending': 'newest',
+          'descending': 'oldest'
+        },
+        'song':{
+          'ascending': 'a to z',
+          'descending': 'z to a'
+        },
+        'author':{
+          'ascending': 'a to z',
+          'descending': 'z to a'
+        },
+        'difficulty': {
+          'ascending': 'easiest',
+          'descending': 'hardest'
+        }
+      },
+      trayOpen: true
     }, 
     computed: {
       sorted: function() {
+        let reverse = (func) => {
+          let inner = (a, b) => {
+            return func(b, a);
+          }
+          return inner;
+        };
         let sorting_functions = {
           'last_updated': (a, b) => {
             return (moment(a.last_updated) > moment(b.last_updated) ? -1 : 1);
@@ -57,7 +94,11 @@ var app = new Vue({
             return a.author.localeCompare(b.author);
           }
         };
-        this.target.sort(sorting_functions[this.sort_by]);
+        let sort_func = sorting_functions[this.sort_by];
+        if (this.sort_direction === 'descending') {
+          sort_func = reverse(sort_func);
+        }
+        this.target.sort(sort_func);
         return this.target;
       },
       truncated: function() {
@@ -75,6 +116,20 @@ var app = new Vue({
     methods: {
       switchPage: function(pageNo) {
         this.startIndex = this.limit * (pageNo - 1);
+      },
+      switchType: function() {
+        if (this.display_type === 'cards') {
+          this.display_type = 'list';
+        } else {
+          this.display_type = 'cards';
+        }
+      },
+      switchDirection: function() {
+        if (this.sort_direction === 'ascending') {
+          this.sort_direction = 'descending';
+        } else {
+          this.sort_direction = 'ascending';
+        }
       },
       convertToHtml : function(text) {
         let proposedHtml = convert(text);

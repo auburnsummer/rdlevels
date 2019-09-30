@@ -86,7 +86,7 @@ module.exports = {
       legacy: false, // defaults to false, set to true to output IE-compatible CSS (no custom properties, but much larger CSS for the same functionality)
     }),
     function({ addUtilities, variants}) {
-      // This function is your plugin
+      // defocus plugin
       const newUtilities = {
         '.defocus' : {
           filter: "brightness(50%) saturate(120%) blur(2px)"
@@ -94,6 +94,6 @@ module.exports = {
       };
       addUtilities(newUtilities, variants('defocus'));
     },
-    require('tailwindcss-transitions')(),
+    require('tailwindcss-transitions')()
   ]
 }
