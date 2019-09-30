@@ -6,13 +6,18 @@ const axios = require('axios');
 const convert = require('./converter.js');
 const createDOMPurify = require('dompurify');
 const DOMPurify = createDOMPurify(window);
+const AsyncComputed = require('vue-async-computed');
+const work = require('webworkify')
+
+Vue.use(AsyncComputed);
 
 const API_URL='https://script.google.com/macros/s/AKfycbzm3I9ENulE7uOmze53cyDuj7Igi7fmGiQ6w045fCRxs_sK3D4/exec';
 
 var app = new Vue({
     el: '#app',
     data: {
-      target: null,
+      target: [],
+      search_results: [],
       state: 'LOADING', // initial state
       error: null,
       limit: 10,
@@ -30,7 +35,7 @@ var app = new Vue({
       order_texts: {
         'score': {
           'ascending': 'most relevant',
-          'desecending': 'least relevant'
+          'descending': 'least relevant'
         },
         'last_updated': {
           'ascending': 'newest',
@@ -49,10 +54,38 @@ var app = new Vue({
           'descending': 'hardest'
         }
       },
-      trayOpen: false
+      trayOpen: false,
+      searchQuery: ''
     }, 
     computed: {
-      sorted: function() {
+      truncated: function() {
+        let sorted = this.sorted(this.search_results);
+        return _.slice(sorted, this.startIndex, this.startIndex+this.limit);
+      },
+      numberOfPages: function() {
+        return Math.ceil(this.search_results.length / this.limit);
+      },
+      currentPage: function() {
+        let proposal = Math.floor(this.startIndex / this.limit) + 1;
+        return Math.min(proposal, this.numberOfPages);
+      },
+    },
+    watch: {
+      searchQuery: function() {
+        let vm = this;
+        console.log(this.searchQuery);
+        this.debouncedFireSearchQuery();
+        this.debouncedFireSearchQuery.cancel();
+      }
+    },
+    methods: {
+      fireSearchQuery: function() {
+        this.worker.postMessage(['search', this.target, this.searchQuery]);
+      },
+      searchCallback: function(e) {
+        this.search_results = e.data;
+      },
+      sorted: function(data) {
         let reverse = (func) => {
           let inner = (a, b) => {
             return func(b, a);
@@ -60,6 +93,9 @@ var app = new Vue({
           return inner;
         };
         let sorting_functions = {
+          'score': (a, b) => {
+            return a.score < b.score ? -1 : 1;
+          },
           'last_updated': (a, b) => {
             return (moment(a.last_updated) > moment(b.last_updated) ? -1 : 1);
           },
@@ -83,22 +119,9 @@ var app = new Vue({
         if (this.sort_direction === 'descending') {
           sort_func = reverse(sort_func);
         }
-        this.target.sort(sort_func);
-        return this.target;
+        data.sort(sort_func);
+        return data;
       },
-      truncated: function() {
-        let sorted = this.sorted;
-        return _.slice(this.target, this.startIndex, this.startIndex+this.limit);
-      },
-      numberOfPages: function() {
-        return Math.ceil(this.target.length / this.limit);
-      },
-      currentPage: function() {
-        let proposal = Math.floor(this.startIndex / this.limit) + 1;
-        return Math.min(proposal, this.numberOfPages);
-      },
-    },
-    methods: {
       switchPage: function(pageNo) {
         this.startIndex = this.limit * (pageNo - 1);
       },
@@ -133,6 +156,7 @@ var app = new Vue({
             // insert data and change the state
             console.log(data.data);
             this.target = data.data;
+            this.search_results = data.data;
             this.state = "LOADED";
             return this.$nextTick()
         })
@@ -144,6 +168,11 @@ var app = new Vue({
             this.state = "ERROR";
             this.error = err;
         });
+    },
+    created: function () {
+      this.worker = work(require('./search.js'));
+      this.worker.onmessage = this.searchCallback;
+      this.debouncedFireSearchQuery = _.throttle(this.fireSearchQuery, 100);
     }
   })
 

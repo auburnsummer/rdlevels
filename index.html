@@ -21,7 +21,8 @@
         <div class='flex justify-between items-center px-3 py-2'>
           <!-- search bar -->
           <div class='flex-grow'>
-            <input class='w-full rounded text-lg text-semibold py-1 px-2' type='search'>
+            <input v-model='searchQuery'
+            class='w-full rounded text-lg text-semibold py-1 px-2' type='search'>
           </div>
           <!-- hamburger icon -->
           <div class='ml-20 flex items-center'>
@@ -79,7 +80,7 @@
             <span class='ml-3'>Sort by </span>
             <div class="relative flex items-center">
               <select class='appearance-none bg-gray-400 rounded-lg font-semibold ml-1 pr-5 text-gray-800' v-model="sort_by">
-                <option value="score" hidden>relevance</option>
+                <option value="score">relevance</option>
                 <option value="last_updated">publish date</option>
                 <option value="song">title</option>
                 <option value="difficulty">difficulty</option>
@@ -112,7 +113,6 @@
         <!-- each card starts here -->
         <article 
         v-for="(level,index) in truncated"
-        v-bind:key="level"
         class="flex-1 flex flex-col 
              min-w-72 max-w-sm m-2
              bg-gray-200 
