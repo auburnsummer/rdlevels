@@ -42,10 +42,12 @@ var app = new Vue({
       error: null,
       limit: 10,
       limit_options: [
+        { text: '6', value: 6},
+        { text: '8', value: 8},
         { text: '10', value: 10 },
-        { text: '25', value: 25 },
-        { text: '50', value: 50 },
-        { text: '100', value: 100 },
+        { text: '24', value: 24 },
+        { text: '48', value: 48 },
+        { text: '72', value: 72 },
         { text: 'All', value: 9999 },
       ],
       i_currentPage: 0,
@@ -88,7 +90,7 @@ var app = new Vue({
       },
       currentPage: {
         get: function() {
-          return this.i_currentPage;
+          return _.clamp(this.i_currentPage, 0, this.numberOfPages-1);
         },
         set: function(newValue) {
           this.i_currentPage = _.clamp(newValue, 0, this.numberOfPages-1);
