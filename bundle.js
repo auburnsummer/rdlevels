@@ -216,6 +216,19 @@ var app = new Vue({
           return ", ";
         }
         return '';
+      },
+      niceDateFormatted: function(str) {
+        let m = moment(str);
+        return m.format("dddd, MMMM Do YYYY");
+      },
+      playerFormatted: function(p1, p2) {
+        if (p1 && p2) {
+          return 'both modes';
+        }
+        if (p1) {
+          return '1p only';
+        }
+        return '2p only';
       }
     },
     mounted: function () {
