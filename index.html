@@ -24,8 +24,13 @@
             <input v-model='searchQuery'
             class='w-full rounded text-lg text-semibold py-1 px-2' type='search'>
           </div>
+          <!-- pagination shows up at the top on ipadish sizes -->
+          <pagination class="hidden sm:flex ml-4"
+          v-bind:current-page='currentPage' 
+          v-bind:number-of-pages='numberOfPages'
+          v-on:page-change='switchPage'></pagination>
           <!-- hamburger icon -->
-          <div class='ml-20 flex items-center'>
+          <div class='ml-20 sm:ml-4 flex items-center'>
             <button v-on:click="trayOpen = !trayOpen" class="text-gray-400 hover:text-white">
               <svg class="h-8 w-8 fill-current" aria-hidden="true" data-prefix="fas" data-icon="bars" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                 <path v-if="!trayOpen" fill="currentColor" d="M16 132h416a16 16 0 0 0 16-16V76a16 16 0 0 0-16-16H16A16 16 0 0 0 0 76v40a16 16 0 0 0 16 16zm0 160h416a16 16 0 0 0 16-16v-40a16 16 0 0 0-16-16H16a16 16 0 0 0-16 16v40a16 16 0 0 0 16 16zm0 160h416a16 16 0 0 0 16-16v-40a16 16 0 0 0-16-16H16a16 16 0 0 0-16 16v40a16 16 0 0 0 16 16z"/>
@@ -36,22 +41,11 @@
         </div>
         <!-- menu / sidebar-->
         <div v-show='trayOpen' class='px-3 pt-2 pb-4'>
-          <!-- pagination -->
-          <ul class='flex items-center justify-center text-gray-400 font-semibold py-2'>
-            <li class='inline-block flex items-center'><a class='px-2 hover:cursor-pointer hover:text-white' v-on:click="switchPage(currentPage-1)">
-                <svg class='h-4 w-4 fill-current' aria-hidden="true" data-prefix="fas" data-icon="chevron-left" class="svg-inline--fa fa-chevron-left fa-w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                  <path fill="currentColor" d="M34.52 239.03L228.87 44.69a24 24 0 0 1 33.94 0l22.67 22.67a24 24 0 0 1 .04 33.9L131.49 256l154.02 154.75a24 24 0 0 1-.04 33.9l-22.67 22.67a24 24 0 0 1-33.94 0L34.52 272.97a24 24 0 0 1 0-33.94z"/>
-                </svg>
-            </a></li>
-            <li class='inline-block flex items-center'><a class='px-2 hover:cursor-default' href="#">
-              {{currentPage+1}} of {{numberOfPages}}
-            </a></li>
-            <li class='inline-block flex items-center'><a class='px-2 hover:cursor-pointer hover:text-white' v-on:click="switchPage(currentPage+1)">
-                <svg class='h-4 w-4 fill-current' aria-hidden="true" data-prefix="fas" data-icon="chevron-right" class="svg-inline--fa fa-chevron-right fa-w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                  <path fill="currentColor" d="M285.48 272.97L91.13 467.31a24 24 0 0 1-33.94 0l-22.67-22.66a24 24 0 0 1-.04-33.9L188.5 256 34.48 101.25a24 24 0 0 1 .04-33.9L57.2 44.7a24 24 0 0 1 33.94 0l194.35 194.34a24 24 0 0 1 0 33.94z"/>
-                </svg>
-            </a></li>
-          </ul>
+          <!-- pagination shows up in the sidebar on mobile -->
+          <pagination class="sm:hidden"
+          v-bind:current-page='currentPage' 
+          v-bind:number-of-pages='numberOfPages'
+          v-on:page-change='switchPage'></pagination>
           <!-- limit -->
           <div class='mt-3 flex items-center text-gray-400 font-semibold'>
             <svg class="w-5 h-5 fill-current" aria-hidden="true" data-prefix="fas" data-icon="pager" class="svg-inline--fa fa-pager fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">

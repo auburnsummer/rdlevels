@@ -15,6 +15,9 @@ const API_URL='https://script.google.com/macros/s/AKfycbzm3I9ENulE7uOmze53cyDuj7
 
 var app = new Vue({
     el: '#app',
+    components: {
+      'pagination': require('./pagination.js')
+    },
     data: {
       target: [],
       search_results: [],
