@@ -79,6 +79,7 @@ module.exports = {
     defocus: ['group-hover'],
     cursor: ['responsive', 'hover', 'focus'],
     opacity: ['responsive', 'group-hover'],
+    shadow: ['responsive', 'hover', 'focus', 'group-hover']
   },
   plugins: [
     require('@tailwindcss/custom-forms'),

@@ -16,9 +16,9 @@
     <!-- This div appears when loaded. -->
     <div v-if="state=='LOADED'" id="loaded_state">
 
-      <header class='fixed top-0 w-full bg-gray-800 z-10'>
+      <header class='fixed top-0 w-full z-10'>
         <!-- top part -->
-        <div class='flex justify-between items-center px-3 py-2'>
+        <div class='flex justify-between items-center bg-gray-800 px-3 py-2'>
           <!-- search bar -->
           <div class='flex-grow'>
             <input v-model='searchQuery'
@@ -40,7 +40,7 @@
           </div>
         </div>
         <!-- menu / sidebar-->
-        <div v-show='trayOpen' class='px-3 pt-2 pb-4'>
+        <div v-show='trayOpen' class='bg-gray-800 px-3 pt-2 pb-4 sm:max-w-xs sm:float-right sm:clearfix sm:rounded-bl-lg sm:px-6'>
           <!-- pagination shows up in the sidebar on mobile -->
           <pagination class="sm:hidden"
           v-bind:current-page='currentPage' 
@@ -65,7 +65,7 @@
             <span class="ml-1"> levels per page </span>
           </div>
           <!-- sort by -->
-          <div class='mt-3 flex items-center text-gray-400 font-semibold'>
+          <div class='mt-4 flex items-center text-gray-400 font-semibold'>
             <svg class="w-5 h-5 fill-current" aria-hidden="true" data-prefix="fas" data-icon="sort-size-up" class="svg-inline--fa fa-sort-size-up fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
               <path v-if="sort_direction == 'ascending'"  fill="currentColor" d="M107.31 36.69a16 16 0 0 0-22.62 0l-80 96C-5.35 142.74 1.77 160 16 160h48v304a16 16 0 0 0 16 16h32a16 16 0 0 0 16-16V160h48c14.21 0 21.38-17.24 11.31-27.31zM484 32H284a28 28 0 0 0-28 28v168a28 28 0 0 0 28 28h200a28 28 0 0 0 28-28V60a28 28 0 0 0-28-28zm-56 288H276a20 20 0 0 0-20 20v120a20 20 0 0 0 20 20h152a20 20 0 0 0 20-20V340a20 20 0 0 0-20-20z"/>
               <path v-if="sort_direction == 'descending'" fill="currentColor" d="M428 320H276a20 20 0 0 0-20 20v120a20 20 0 0 0 20 20h152a20 20 0 0 0 20-20V340a20 20 0 0 0-20-20zm-252 32h-48V48a16 16 0 0 0-16-16H80a16 16 0 0 0-16 16v304H16c-14.19 0-21.37 17.24-11.29 27.31l80 96a16 16 0 0 0 22.62 0l80-96C197.35 369.26 190.22 352 176 352zM484 32H284a28 28 0 0 0-28 28v168a28 28 0 0 0 28 28h200a28 28 0 0 0 28-28V60a28 28 0 0 0-28-28z"/>
@@ -91,7 +91,7 @@
             </span>
           </div>
           <!-- display type -->
-          <div class='mt-2 flex items-center text-gray-400 font-semibold'>
+          <div class='mt-3 flex items-center text-gray-400 font-semibold'>
             <svg class="w-5 h-5 fill-current" aria-hidden="true" data-prefix="fas" data-icon="grip-horizontal" class="svg-inline--fa fa-grip-horizontal fa-w-14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
               <path v-if="display_type == 'cards'" fill="currentColor" d="M96 288H32a32 32 0 0 0-32 32v64a32 32 0 0 0 32 32h64a32 32 0 0 0 32-32v-64a32 32 0 0 0-32-32zm160 0h-64a32 32 0 0 0-32 32v64a32 32 0 0 0 32 32h64a32 32 0 0 0 32-32v-64a32 32 0 0 0-32-32zm160 0h-64a32 32 0 0 0-32 32v64a32 32 0 0 0 32 32h64a32 32 0 0 0 32-32v-64a32 32 0 0 0-32-32zM96 96H32a32 32 0 0 0-32 32v64a32 32 0 0 0 32 32h64a32 32 0 0 0 32-32v-64a32 32 0 0 0-32-32zm160 0h-64a32 32 0 0 0-32 32v64a32 32 0 0 0 32 32h64a32 32 0 0 0 32-32v-64a32 32 0 0 0-32-32zm160 0h-64a32 32 0 0 0-32 32v64a32 32 0 0 0 32 32h64a32 32 0 0 0 32-32v-64a32 32 0 0 0-32-32z"/>
               <path v-if="display_type == 'list'" fill="currentColor" d="M464 480H48a48 48 0 0 1-48-48V80a48 48 0 0 1 48-48h416a48 48 0 0 1 48 48v352a48 48 0 0 1-48 48zM128 120a40 40 0 1 0 0 80 40 40 0 0 0 0-80zm0 96a40 40 0 1 0 0 80 40 40 0 0 0 0-80zm0 96a40 40 0 1 0 0 80 40 40 0 0 0 0-80zm288-136v-32a12 12 0 0 0-12-12H204a12 12 0 0 0-12 12v32a12 12 0 0 0 12 12h200a12 12 0 0 0 12-12zm0 96v-32a12 12 0 0 0-12-12H204a12 12 0 0 0-12 12v32a12 12 0 0 0 12 12h200a12 12 0 0 0 12-12zm0 96v-32a12 12 0 0 0-12-12H204a12 12 0 0 0-12 12v32a12 12 0 0 0 12 12h200a12 12 0 0 0 12-12z"/>
@@ -116,7 +116,7 @@
           <!-- image -->
           <div class="relative pb-9/16 bg-gray-700 rounded-t-lg overflow-hidden">
             
-            <img class="group-hover:defocus transition-filter shadow-inner absolute h-full w-full object-cover" :src="level.preview_img">
+            <img class="group-hover:defocus transition-filter absolute h-full w-full object-cover" :src="level.preview_img">
             
             <!-- overlay -->
             <div 
