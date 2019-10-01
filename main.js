@@ -28,7 +28,7 @@ var app = new Vue({
         { text: '100', value: 100 },
         { text: 'All', value: 9999 },
       ],
-      startIndex: 0,
+      i_currentPage: 0,
       sort_by: 'last_updated',
       sort_direction: 'ascending',
       display_type: 'cards',
@@ -55,20 +55,25 @@ var app = new Vue({
         }
       },
       trayOpen: false,
-      searchQuery: ''
+      searchQuery: '',
+      relevanceAllowed: false
     }, 
     computed: {
       truncated: function() {
         let sorted = this.sorted(this.search_results);
-        return _.slice(sorted, this.startIndex, this.startIndex+this.limit);
+        return _.chunk(this.search_results, this.limit)[this.currentPage];
       },
       numberOfPages: function() {
-        return Math.ceil(this.search_results.length / this.limit);
+        return _.chunk(this.search_results, this.limit).length;
       },
-      currentPage: function() {
-        let proposal = Math.floor(this.startIndex / this.limit) + 1;
-        return Math.min(proposal, this.numberOfPages);
-      },
+      currentPage: {
+        get: function() {
+          return this.i_currentPage;
+        },
+        set: function(newValue) {
+          this.i_currentPage = _.clamp(newValue, 0, this.numberOfPages-1);
+        }
+      }
     },
     watch: {
       searchQuery: function() {
@@ -76,22 +81,27 @@ var app = new Vue({
         console.log(this.searchQuery);
         this.debouncedFireSearchQuery();
         this.debouncedFireSearchQuery.cancel();
+      },
+      relevanceAllowed: function() {
+        if (this.relevanceAllowed) {
+          this.sort_by = 'score';
+          this.sort_direction = 'ascending';
+        } else {
+          if (this.sort_by === 'score') {
+            this.sort_by = 'last_updated';
+            this.sort_direction = 'ascending';  
+          }
+        }
       }
     },
     methods: {
       fireSearchQuery: function() {
         this.worker.postMessage(['search', this.target, this.searchQuery]);
-        if (this.searchQuery === '' && this.sort_by === 'score') {
-          this.sort_by = 'last_updated';
-          this.sort_direction = 'ascending';
-        }
       },
       searchCallback: function(e) {
-        this.search_results = e.data;
-        if (this.searchQuery != '') {
-          this.sort_by = 'score';
-          this.sort_direction = 'ascending';
-        }
+        this.search_results = e.data[1];
+        this.relevanceAllowed = e.data[0];
+        this.currentPage = this.currentPage;
       },
       sorted: function(data) {
         let reverse = (func) => {
@@ -131,7 +141,7 @@ var app = new Vue({
         return data;
       },
       switchPage: function(pageNo) {
-        this.startIndex = this.limit * (pageNo - 1);
+        this.currentPage = pageNo;
       },
       switchType: function() {
         if (this.display_type === 'cards') {
@@ -162,6 +172,16 @@ var app = new Vue({
           return 'Very Tough';
         }
         return diff;
+      },
+      addDifficultyToSearch : function(diff) {
+        let text = this.getDifficultyText(diff);
+        this.searchQuery = `diff=${_.lowerCase(text)} ${this.searchQuery}`
+      },
+      addTagToSearch : function (tag) {
+        this.searchQuery = `[${tag}] ${this.searchQuery}`
+      },
+      addToSearch : function (text) {
+        this.searchQuery = `${text} ${this.searchQuery}`
       }
     },
     mounted: function () {
@@ -171,6 +191,7 @@ var app = new Vue({
             console.log(data.data);
             this.target = data.data;
             this.search_results = data.data;
+            this.startIndex = 0;
             this.state = "LOADED";
             return this.$nextTick()
         })

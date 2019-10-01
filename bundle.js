@@ -43,7 +43,7 @@ var app = new Vue({
         { text: '100', value: 100 },
         { text: 'All', value: 9999 },
       ],
-      startIndex: 0,
+      i_currentPage: 0,
       sort_by: 'last_updated',
       sort_direction: 'ascending',
       display_type: 'cards',
@@ -70,20 +70,25 @@ var app = new Vue({
         }
       },
       trayOpen: false,
-      searchQuery: ''
+      searchQuery: '',
+      relevanceAllowed: false
     }, 
     computed: {
       truncated: function() {
         let sorted = this.sorted(this.search_results);
-        return _.slice(sorted, this.startIndex, this.startIndex+this.limit);
+        return _.chunk(this.search_results, this.limit)[this.currentPage];
       },
       numberOfPages: function() {
-        return Math.ceil(this.search_results.length / this.limit);
+        return _.chunk(this.search_results, this.limit).length;
       },
-      currentPage: function() {
-        let proposal = Math.floor(this.startIndex / this.limit) + 1;
-        return Math.min(proposal, this.numberOfPages);
-      },
+      currentPage: {
+        get: function() {
+          return this.i_currentPage;
+        },
+        set: function(newValue) {
+          this.i_currentPage = _.clamp(newValue, 0, this.numberOfPages-1);
+        }
+      }
     },
     watch: {
       searchQuery: function() {
@@ -91,22 +96,27 @@ var app = new Vue({
         console.log(this.searchQuery);
         this.debouncedFireSearchQuery();
         this.debouncedFireSearchQuery.cancel();
+      },
+      relevanceAllowed: function() {
+        if (this.relevanceAllowed) {
+          this.sort_by = 'score';
+          this.sort_direction = 'ascending';
+        } else {
+          if (this.sort_by === 'score') {
+            this.sort_by = 'last_updated';
+            this.sort_direction = 'ascending';  
+          }
+        }
       }
     },
     methods: {
       fireSearchQuery: function() {
         this.worker.postMessage(['search', this.target, this.searchQuery]);
-        if (this.searchQuery === '' && this.sort_by === 'score') {
-          this.sort_by = 'last_updated';
-          this.sort_direction = 'ascending';
-        }
       },
       searchCallback: function(e) {
-        this.search_results = e.data;
-        if (this.searchQuery != '') {
-          this.sort_by = 'score';
-          this.sort_direction = 'ascending';
-        }
+        this.search_results = e.data[1];
+        this.relevanceAllowed = e.data[0];
+        this.currentPage = this.currentPage;
       },
       sorted: function(data) {
         let reverse = (func) => {
@@ -146,7 +156,7 @@ var app = new Vue({
         return data;
       },
       switchPage: function(pageNo) {
-        this.startIndex = this.limit * (pageNo - 1);
+        this.currentPage = pageNo;
       },
       switchType: function() {
         if (this.display_type === 'cards') {
@@ -177,6 +187,16 @@ var app = new Vue({
           return 'Very Tough';
         }
         return diff;
+      },
+      addDifficultyToSearch : function(diff) {
+        let text = this.getDifficultyText(diff);
+        this.searchQuery = `diff=${_.lowerCase(text)} ${this.searchQuery}`
+      },
+      addTagToSearch : function (tag) {
+        this.searchQuery = `[${tag}] ${this.searchQuery}`
+      },
+      addToSearch : function (text) {
+        this.searchQuery = `${text} ${this.searchQuery}`
       }
     },
     mounted: function () {
@@ -186,6 +206,7 @@ var app = new Vue({
             console.log(data.data);
             this.target = data.data;
             this.search_results = data.data;
+            this.startIndex = 0;
             this.state = "LOADED";
             return this.$nextTick()
         })
@@ -39696,6 +39717,63 @@ const fuse_options = {
     ]                   
 };
 
+const difficulty_filter = (data, matches) => {
+    let difficultyMap = {
+        'Easy' : 0,
+        'Medium' : 1,
+        'Tough' : 2,
+        'VeryTough' : 3
+    };
+    let inputMap = {
+        'easy': 0,
+        'medium': 1,
+        'tough': 2,
+        'hard': 2,
+        'very tough': 3
+    };
+    let filterDifficulty = inputMap[_.lowerCase(matches[2])];
+    return _.filter(data, (doc) => {
+        let thisDifficulty = difficultyMap[doc.difficulty];
+        if (matches[1] === '=') {
+            return thisDifficulty === filterDifficulty;
+        }
+        if (matches[1] === '>') {
+            return thisDifficulty > filterDifficulty;
+        }
+        if (matches[1] === '<') {
+            return thisDifficulty < filterDifficulty;
+        }
+    })
+}
+
+const tag_filter = (data, matches) => {
+    let options = {
+        threshold: 0.08,
+        location: 0,
+        distance: 32,
+        maxPatternLength: 32,
+        minMatchCharLength: 1,
+        keys: [
+          "tags"
+        ]
+    };
+    let tag_fuse = new Fuse(data, options);
+    return tag_fuse.search(matches[1]);
+}
+
+/* REGEXES */
+const filters = [
+    {
+        regex: /diff(?:iculty)? ?([>=<]) ?((?:easy)|(?:medium)|(?:tough)|(?:hard)|(?:very tough))/i,
+        func: difficulty_filter
+    },
+    {
+        regex: /\[([\w ]+)\]/,
+        func: tag_filter
+    }
+]
+
+
 const do_search = (fuse, query) => {
     let result = fuse.search(query);
 
@@ -39710,16 +39788,33 @@ module.exports = function (self) {
     self.addEventListener('message', function (ev) {
         console.log(ev.data);
         let result;
+        let relevanceAllowed = false; // should we allows relevance?
         if (ev.data[0] === 'search') {
-            if (ev.data[2] === '') {
-                result = ev.data[1];
+            // run through the filters.
+            let docs = ev.data[1];
+            let query = ev.data[2];
+            for (const pair of filters) {
+                let match = pair.regex.exec(query);
+                while (match) {
+                    console.log(`matched: ${match}`);
+                    docs = pair.func(docs, match);
+                    query = query.replace(match[0], '');
+                    console.log(`query: ${query}`);
+                    match = pair.regex.exec(query);
+                }
+            }
+            let fuse = new Fuse(docs, fuse_options);
+            query = _.trim(query);
+            if (query === '') {
+                result = docs;
             } else {
-                let fuse = new Fuse(ev.data[1], fuse_options);
-                result = do_search(fuse, ev.data[2]);
+                relevanceAllowed = true;
+                result = do_search(fuse, _.trim(query));
             }
         }
+
         console.log(result);
-        self.postMessage(result);
+        self.postMessage([relevanceAllowed, result]);
     })
 }
 },{"fuse.js":31,"lodash":32}],41:[function(require,module,exports){
