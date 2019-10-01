@@ -5,16 +5,16 @@ var _ = require('lodash');
 const fuse_options = {
     shouldSort: false,
     includeScore: true,
-    threshold: 0.4,
+    threshold: 0.3,
     location: 0,
     distance: 100,
     maxPatternLength: 32,
     minMatchCharLength: 1,
     keys: [
-      {name:"song",weight:0.28},
-      {name:"artist",weight:0.26},
-      {name:"author",weight:0.26},
-      {name:"description",weight:0.12},
+      {name:"song",weight:0.30},
+      {name:"artist",weight:0.20},
+      {name:"author",weight:0.32},
+      {name:"description",weight:0.10},
       {name:"tags",weight:0.08}
     ]                   
 };

@@ -9,6 +9,8 @@ const DOMPurify = createDOMPurify(window);
 const AsyncComputed = require('vue-async-computed');
 const work = require('webworkify')
 
+const preprocess = require('./rdlevels_preprocess.js');
+
 Vue.use(AsyncComputed);
 
 const API_URL='https://script.google.com/macros/s/AKfycbzm3I9ENulE7uOmze53cyDuj7Igi7fmGiQ6w045fCRxs_sK3D4/exec';
@@ -104,7 +106,7 @@ var app = new Vue({
       searchCallback: function(e) {
         this.search_results = e.data[1];
         this.relevanceAllowed = e.data[0];
-        this.currentPage = this.currentPage;
+        this.currentPage = 0;
       },
       sorted: function(data) {
         let reverse = (func) => {
@@ -185,6 +187,18 @@ var app = new Vue({
       },
       addToSearch : function (text) {
         this.searchQuery = `${text} ${this.searchQuery}`
+      },
+      getSeperator: function (i, total) {
+        if (i === total - 2) {
+          if (total > 2) {
+            return ", and ";
+          }
+          return " and ";
+        }
+        if (i < total - 2) {
+          return ", ";
+        }
+        return '';
       }
     },
     mounted: function () {
@@ -192,8 +206,8 @@ var app = new Vue({
         .then( (data) => {
             // insert data and change the state
             console.log(data.data);
-            this.target = data.data;
-            this.search_results = data.data;
+            this.target = preprocess(data.data);
+            this.search_results = this.target;
             this.startIndex = 0;
             this.state = "LOADED";
             return this.$nextTick()
