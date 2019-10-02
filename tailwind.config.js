@@ -1,11 +1,6 @@
 module.exports = {
   theme: {
     extend: {
-      spacing: {
-        '72': '18rem',
-        '84': '21rem',
-        '96': '24rem',
-      },
       lineHeight: {
         cramped: 0.9
       },
@@ -36,7 +31,11 @@ module.exports = {
         '9/12': '75%',
         '10/12': '83.333333%',
         '11/12': '91.666667%',
-        '9/16' : '56.25%'
+        '1/16' : '6.25%',
+        '9/16' : '56.25%',
+        '72': '18rem',
+        '84': '21rem',
+        '96': '24rem',
       },
       gap: { // defaults to {}
         '0': '0',
@@ -95,6 +94,14 @@ module.exports = {
       };
       addUtilities(newUtilities, variants('defocus'));
     },
-    require('tailwindcss-transitions')()
+    require('tailwindcss-transitions')(),
+    function({ addUtilities, variants}) {
+      const newUtilities = {
+        '.hyphens' : {
+          hyphens: 'auto'
+        }
+      };
+      addUtilities(newUtilities, variants('hyphens'));
+    }
   ]
 }

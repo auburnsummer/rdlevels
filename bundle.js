@@ -219,7 +219,7 @@ var app = new Vue({
       },
       niceDateFormatted: function(str) {
         let m = moment(str);
-        return m.format("dddd, MMMM Do YYYY");
+        return m.format("MMMM Do YYYY");
       },
       playerFormatted: function(p1, p2) {
         if (p1 && p2) {
@@ -229,6 +229,13 @@ var app = new Vue({
           return '1p only';
         }
         return '2p only';
+      },
+      listViewDescription: function(level) {
+        let descr = level.description;
+        if (level.seizure_warning) {
+          descr = '⚠️ ' + descr;
+        }
+        return this.convertToHtml(descr);
       }
     },
     mounted: function () {
