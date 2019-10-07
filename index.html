@@ -149,7 +149,7 @@
             <div>
               <!-- artist + song -->
               <h2 class="text-gray-700 text-xs leading-cramped break-words">{{level.artist}}</h2>
-              <h1 class="font-semibold text-lg leading-tight break-words">{{level.song}}</h1>
+              <h1 :class="level.verified ? 'font-semibold' : 'font-light'" class="text-lg leading-tight break-words">{{level.song}}</h1>
               
               <!-- icons + metadata -->
               <div class="flex flex-wrap gap gap-x-3 mt-1">
