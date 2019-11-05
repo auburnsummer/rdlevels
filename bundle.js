@@ -78,7 +78,8 @@ var app = new Vue({
       },
       trayOpen: false,
       searchQuery: '',
-      relevanceAllowed: false
+      relevanceAllowed: false,
+      showAutoImportLinks: false,
     }, 
     computed: {
       truncated: function() {
@@ -95,7 +96,7 @@ var app = new Vue({
         set: function(newValue) {
           this.i_currentPage = _.clamp(newValue, 0, this.numberOfPages-1);
         }
-      }
+      },
     },
     watch: {
       searchQuery: function() {
@@ -194,6 +195,9 @@ var app = new Vue({
           return 'Very Tough';
         }
         return diff;
+      },
+      getAutoimportLink : function(url) {
+        return 'rhythmdr://' + url
       },
       addDifficultyToSearch : function(diff) {
         let text = this.getDifficultyText(diff);
