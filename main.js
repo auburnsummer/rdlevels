@@ -8,6 +8,7 @@ const createDOMPurify = require('dompurify');
 const DOMPurify = createDOMPurify(window);
 const AsyncComputed = require('vue-async-computed');
 const work = require('webworkify')
+const queryString = require('query-string');
 
 const preprocess = require('./rdlevels_preprocess.js');
 
@@ -29,7 +30,7 @@ var app = new Vue({
       limit_options: [
         { text: '6', value: 6},
         { text: '8', value: 8},
-        { text: '10', value: 10 },
+        { text: '15', value: 15 },
         { text: '24', value: 24 },
         { text: '48', value: 48 },
         { text: '72', value: 72 },
@@ -59,12 +60,17 @@ var app = new Vue({
         'difficulty': {
           'ascending': 'easiest',
           'descending': 'hardest'
+        },
+        'sampler': {
+          'ascending' : '!',
+          'descending' : '!!'
         }
       },
       trayOpen: false,
       searchQuery: '',
-      relevanceAllowed: false,
+      sortState: "search",
       showAutoImportLinks: false,
+      params: {}
     }, 
     computed: {
       truncated: function() {
@@ -90,15 +96,16 @@ var app = new Vue({
         this.debouncedFireSearchQuery();
         this.debouncedFireSearchQuery.cancel();
       },
-      relevanceAllowed: function() {
-        if (this.relevanceAllowed) {
+      sortState: function() {
+        if (this.sortState == 'relevance') {
           this.sort_by = 'score';
           this.sort_direction = 'ascending';
-        } else {
-          if (this.sort_by === 'score') {
+        } else if (this.sortState == 'sampler') {
+          this.sort_by = 'sampler';
+          this.sort_direction = 'ascending';
+        } else if (this.sort_by === 'score') {
             this.sort_by = 'last_updated';
             this.sort_direction = 'ascending';  
-          }
         }
       }
     },
@@ -106,10 +113,19 @@ var app = new Vue({
       fireSearchQuery: function() {
         this.worker.postMessage(['search', this.target, this.searchQuery]);
       },
+      fireSamplerQuery: function() {
+        this.worker.postMessage(['setrandom', _.random(20000)]);
+      },
       searchCallback: function(e) {
-        this.search_results = e.data[1];
-        this.relevanceAllowed = e.data[0];
-        this.currentPage = 0;
+        // callback from setrandom instead of search?
+        if (e.data[0] === 'setrandom') {
+          this.searchQuery = "*sampler";
+        }
+        else {
+          this.search_results = e.data[1];
+          this.sortState = e.data[0];
+          this.currentPage = 0;
+        }
       },
       sorted: function(data) {
         let reverse = (func) => {
@@ -139,7 +155,8 @@ var app = new Vue({
           },
           'author': (a, b) => {
             return a.author.localeCompare(b.author);
-          }
+          },
+          'sampler': _.constant(0)
         };
         let sort_func = sorting_functions[this.sort_by];
         if (this.sort_direction === 'descending') {
@@ -236,6 +253,8 @@ var app = new Vue({
             this.search_results = this.target;
             this.startIndex = 0;
             this.state = "LOADED";
+            this.params = queryString.parse(location.search);
+            console.log(this.params);
             return this.$nextTick()
         })
         .then( () => {

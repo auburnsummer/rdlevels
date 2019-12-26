@@ -1,5 +1,10 @@
 var Fuse = require('fuse.js');
 var _ = require('lodash');
+var seedrandom = require('seedrandom');
+
+const sampler_data = require('./sampler_data.js');
+
+var current_random = 0;
 
 /* Fuse options for general terms */
 const fuse_options = {
@@ -63,6 +68,25 @@ const tag_filter = (data, matches) => {
     return tag_fuse.search(matches[1]);
 }
 
+const sampler_filter = (data, matches) => {
+    seedrandom(current_random, {global: true});
+    _ = _.runInContext();
+    let urls = _.flatten(
+        _.map(sampler_data, (pool) => {
+            let indexes = _.sortBy(_.sampleSize(_.range(pool.levels.length), pool.take));
+            return _.map(indexes, (index) => {
+                return pool.levels[index];
+            })
+        })
+    )
+    console.log(urls);
+    return _.map(urls, (url) =>  {
+        return _.find(data, (level) => {
+            return level.download_url === url
+        })
+    })
+}
+
 /* REGEXES */
 const filters = [
     {
@@ -72,6 +96,10 @@ const filters = [
     {
         regex: /\[([\w ]+)\]/,
         func: tag_filter
+    },
+    {
+        regex: /\*sampler/,
+        func: sampler_filter
     }
 ]
 
@@ -91,6 +119,7 @@ module.exports = function (self) {
         console.log(ev.data);
         let result;
         let relevanceAllowed = false; // should we allows relevance?
+        let matched = []; // list of matched filters
         if (ev.data[0] === 'search') {
             // run through the filters.
             let docs = ev.data[1];
@@ -98,6 +127,7 @@ module.exports = function (self) {
             for (const pair of filters) {
                 let match = pair.regex.exec(query);
                 while (match) {
+                    matched.push(pair.func.name)
                     console.log(`matched: ${match}`);
                     docs = pair.func(docs, match);
                     query = query.replace(match[0], '');
@@ -113,9 +143,28 @@ module.exports = function (self) {
                 relevanceAllowed = true;
                 result = do_search(fuse, _.trim(query));
             }
+
+            let nextState;
+            if (_.includes(matched, "sampler_filter")) {
+                nextState = "sampler";
+            } else if (relevanceAllowed) {
+                nextState = "relevance";
+            } else {
+                nextState = "search";
+            }
+
+            console.log("==============");
+            console.log(matched);
+            console.log(nextState);
+            console.log(current_random);
+
+            self.postMessage([nextState, result]);
         }
 
-        console.log(result);
-        self.postMessage([relevanceAllowed, result]);
+        if (ev.data[0] === 'setrandom') {
+            current_random = parseInt(ev.data[1]);
+            self.postMessage(['setrandom']);
+        }
+
     })
 }
