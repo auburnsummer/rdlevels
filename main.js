@@ -119,7 +119,11 @@ var app = new Vue({
       searchCallback: function(e) {
         // callback from setrandom instead of search?
         if (e.data[0] === 'setrandom') {
-          this.searchQuery = "*sampler";
+          this.searchQuery = "";
+          // let vue notice it's been cleared
+          _.defer( () => {
+            this.addToSearch("*sampler");
+          })
         }
         else {
           this.search_results = e.data[1];

@@ -41,7 +41,7 @@ var app = new Vue({
       search_results: [],
       state: 'LOADING', // initial state
       error: null,
-      limit: 10,
+      limit: 15,
       limit_options: [
         { text: '6', value: 6},
         { text: '8', value: 8},
@@ -134,7 +134,11 @@ var app = new Vue({
       searchCallback: function(e) {
         // callback from setrandom instead of search?
         if (e.data[0] === 'setrandom') {
-          this.searchQuery = "*sampler";
+          this.searchQuery = "";
+          // let vue notice it's been cleared
+          _.defer( () => {
+            this.addToSearch("*sampler");
+          })
         }
         else {
           this.search_results = e.data[1];
