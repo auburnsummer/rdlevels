@@ -26,7 +26,7 @@ var app = new Vue({
       search_results: [],
       state: 'LOADING', // initial state
       error: null,
-      limit: 10,
+      limit: 15,
       limit_options: [
         { text: '6', value: 6},
         { text: '8', value: 8},
