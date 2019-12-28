@@ -43,7 +43,8 @@
     "vue-loader": "^15.7.1",
     "vue-template-compiler": "^2.6.10",
     "vue-worker": "^1.2.1",
-    "webworkify": "^1.5.0"
+    "webworkify": "^1.5.0",
+    "yaml": "^1.7.2"
   },
   "browser": {
     "vue": "vue/dist/vue.common.js"

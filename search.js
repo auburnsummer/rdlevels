@@ -1,8 +1,7 @@
 var Fuse = require('fuse.js');
 var _ = require('lodash');
 var seedrandom = require('seedrandom');
-
-const sampler_data = require('./sampler_data.js');
+var booster = require('./booster.js');
 
 var current_random = 0;
 
@@ -24,7 +23,7 @@ const fuse_options = {
     ]                   
 };
 
-const difficulty_filter = (data, matches) => {
+const difficulty_filter = async (data, matches) => {
     let difficultyMap = {
         'Easy' : 0,
         'Medium' : 1,
@@ -53,7 +52,7 @@ const difficulty_filter = (data, matches) => {
     })
 }
 
-const tag_filter = (data, matches) => {
+const tag_filter = async (data, matches) => {
     let options = {
         threshold: 0.08,
         location: 0,
@@ -68,9 +67,13 @@ const tag_filter = (data, matches) => {
     return tag_fuse.search(matches[1]);
 }
 
-const sampler_filter = (data, matches) => {
+const booster_filter = async (data, matches) => {
     seedrandom(current_random, {global: true});
     _ = _.runInContext();
+    // get the sampler data.
+    // we can poll here because this is inside a webworker
+    let sampler_data = await booster.getBoosterPack(matches[1]);
+    console.log(sampler_data)
     let urls = _.flatten(
         _.map(sampler_data, (pool) => {
             let indexes = _.sortBy(_.sampleSize(_.range(pool.levels.length), pool.take));
@@ -98,8 +101,8 @@ const filters = [
         func: tag_filter
     },
     {
-        regex: /\*sampler/,
-        func: sampler_filter
+        regex: /booster=(\w+)/,
+        func: booster_filter
     }
 ]
 
@@ -115,7 +118,7 @@ const do_search = (fuse, query) => {
 
 
 module.exports = function (self) {
-    self.addEventListener('message', function (ev) {
+    self.addEventListener('message', async function (ev) {
         console.log(ev.data);
         let result;
         let relevanceAllowed = false; // should we allows relevance?
@@ -129,7 +132,7 @@ module.exports = function (self) {
                 while (match) {
                     matched.push(pair.func.name)
                     console.log(`matched: ${match}`);
-                    docs = pair.func(docs, match);
+                    docs = await pair.func(docs, match);
                     query = query.replace(match[0], '');
                     console.log(`query: ${query}`);
                     match = pair.regex.exec(query);
@@ -145,7 +148,7 @@ module.exports = function (self) {
             }
 
             let nextState;
-            if (_.includes(matched, "sampler_filter")) {
+            if (_.includes(matched, "booster_filter")) {
                 nextState = "sampler";
             } else if (relevanceAllowed) {
                 nextState = "relevance";
@@ -163,7 +166,8 @@ module.exports = function (self) {
 
         if (ev.data[0] === 'setrandom') {
             current_random = parseInt(ev.data[1]);
-            self.postMessage(['setrandom']);
+            // pass the phrase back
+            self.postMessage(['setrandom', ev.data[2]]);
         }
 
     })

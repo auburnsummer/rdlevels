@@ -11,6 +11,7 @@ const work = require('webworkify')
 const queryString = require('query-string');
 
 const preprocess = require('./rdlevels_preprocess.js');
+const booster = require('./booster.js');
 
 Vue.use(AsyncComputed);
 
@@ -24,6 +25,7 @@ var app = new Vue({
     data: {
       target: [],
       search_results: [],
+      boosters: [],
       state: 'LOADING', // initial state
       error: null,
       limit: 15,
@@ -67,6 +69,7 @@ var app = new Vue({
         }
       },
       trayOpen: false,
+      boostersOpen: true,
       searchQuery: '',
       sortState: "search",
       showAutoImportLinks: false,
@@ -113,16 +116,16 @@ var app = new Vue({
       fireSearchQuery: function() {
         this.worker.postMessage(['search', this.target, this.searchQuery]);
       },
-      fireSamplerQuery: function() {
-        this.worker.postMessage(['setrandom', _.random(20000)]);
+      fireSamplerQuery: function(name) {
+        this.worker.postMessage(['setrandom', _.random(20000), name]);
       },
       searchCallback: function(e) {
         // callback from setrandom instead of search?
         if (e.data[0] === 'setrandom') {
           this.searchQuery = "";
-          // let vue notice it's been cleared
+          // let vue notice it's been cleared and add the name
           _.defer( () => {
-            this.addToSearch("*sampler");
+            this.addToSearch(`booster=${e.data[1]}`);
           })
         }
         else {
@@ -263,6 +266,12 @@ var app = new Vue({
         })
         .then( () => {
           new ClipboardJS('.copy-link');
+        })
+        .then( () => {
+          return booster.getBoosterPacks();
+        })
+        .then( (data) => {
+          this.boosters = data;
         })
         .catch( (err) => {
             // change the state
