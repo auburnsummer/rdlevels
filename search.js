@@ -74,8 +74,10 @@ const booster_filter = async (data, matches) => {
     // we can poll here because this is inside a webworker
     let sampler_data = await booster.getBoosterPack(matches[1]);
     console.log(sampler_data)
+    // pick urls out of each group
     let urls = _.flatten(
         _.map(sampler_data, (pool) => {
+            // sort so that earlier levels in a group always show up before the later levels
             let indexes = _.sortBy(_.sampleSize(_.range(pool.levels.length), pool.take));
             return _.map(indexes, (index) => {
                 return pool.levels[index];
@@ -83,11 +85,16 @@ const booster_filter = async (data, matches) => {
         })
     )
     console.log(urls);
-    return _.map(urls, (url) =>  {
-        return _.find(data, (level) => {
-            return level.download_url === url
-        })
-    })
+    // map each URL to a level object, and filter out ones we couldn't find at all.
+    return _.filter(_.map(urls, (url) =>  {
+        // search for the level, but return false if we can't find that URL
+        return _.flow([
+            _.partial(_.find, _, (level) => {
+                return level.download_url === url
+            }),
+            _.partial(_.defaultTo, _, false)
+        ])(data);
+    }), _.identity)
 }
 
 /* REGEXES */
