@@ -117,15 +117,6 @@
         </div>
       </header>
 
-      <!-- <div class="pt-20 md:px-8 lg:px-16 inline-block">
-        <ul v-show="currentPage == 0 && params.testing" class="flex flex-row gap gap-x-8 text-sm text-black mx-2 px-4 py-2 rounded bg-indigo-200 opacity-50 w-auto">
-          <li class="ml-0">Not sure which levels to play? <a v-on:click="fireSamplerQuery()" class="underline hover:no-underline hover:text-indigo-900 hover:cursor-pointer">Try a sampler pack!</a></li>
-          <li>Visit <a class="underline hover:no-underline hover:text-indigo-900" href="https://discord.gg/rhythmdr">the Discord server</a> to add a level</li>
-          <li><a class="underline hover:no-underline hover:text-indigo-900" href="https://twitter.com/RhythmDrGame">@RhythmDrGame</a> on Twitter</li>
-        </ul>
-      </div> -->
-
-
       <div class="flex flex-row">
 
         <!-- sidebar -->
@@ -160,70 +151,205 @@
 
         </div>
 
-        <!-- CARDS DISPLAY -->
-        <div v-show="display_type == 'cards'" id="levels-cards" 
-        class="flex-grow pt-24 w-full justify-center mx-auto flex flex-row flex-wrap items-stretch px-8">
-          <!-- each card starts here -->
-                <!-- ticker -->
+        <!-- MAIN AREA -->
+        <div>
 
-          <article 
-          v-for="(level,index) in truncated"
-          class="flex-1 flex flex-col 
-              min-w-72 max-w-sm m-2
-              bg-gray-200 
-              rounded-lg shadow-md hover:shadow-xl transition-shadow
-              group">
 
-            <!-- image -->
-            <div class="relative pb-9/16 bg-gray-700 rounded-t-lg overflow-hidden">
-              
-              <img class="group-hover:defocus transition-filter absolute h-full w-full object-cover" :src="level.preview_img">
-              
-              <!-- overlay -->
-              <div 
-              class="opacity-0 group-hover:opacity-100 transition-opacity
-                  absolute flex h-full w-full p-4 rounted-t-lg">
-                <!-- description -->
-                <div class="flex-initial w-full text-white text-sm overflow-y-auto break-words"
-                v-html="convertToHtml(level.description)">
-                </div>
-                <!-- download + copy link + autoimport buttons -->
-                <div class="flex-none w-8 ml-2 flex flex-col">
-                  <a :data-clipboard-text="level.download_url" class="copy-link text-white border border-white rounded-lg hover:bg-purple-500 hover:cursor-pointer">
-                    <svg class="h-full w-full p-2 fill-current" aria-hidden="true" data-prefix="fas" data-icon="copy" class="svg-inline--fa fa-copy fa-w-14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                      <path fill="currentColor" d="M320 448v40a24 24 0 0 1-24 24H24a24 24 0 0 1-24-24V120a24 24 0 0 1 24-24h72v296c0 30.88 25.12 56 56 56h168zm0-344V0H152a24 24 0 0 0-24 24v368a24 24 0 0 0 24 24h272a24 24 0 0 0 24-24V128H344c-13.2 0-24-10.8-24-24zm120.97-31.03L375.03 7.03A24 24 0 0 0 358.06 0H352v96h96v-6.06a24 24 0 0 0-7.03-16.97z"/>
-                    </svg>
-                  </a>
-                  <a :href="level.download_url" class="mt-4 text-white border border-white rounded-lg hover:bg-purple-500">
-                    <svg class="h-full w-full p-2 fill-current" aria-hidden="true" data-prefix="fas" data-icon="download" class="svg-inline--fa fa-download fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                      <path fill="currentColor" d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49a51.24 51.24 0 0 0 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"/>
-                    </svg>
-                  </a>
-                  <a v-show="showAutoImportLinks" :href="getAutoimportLink(level.download_url)" class="mt-4 text-white border border-white rounded-lg hover:bg-purple-500">
-                    <svg class="h-full w-full p-2 fill-current" aria-hidden="true" data-prefix="fas" data-icon="download" class="svg-inline--fa fa-download fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                      <path fill="currentColor" d="M201.5 174.8l55.7 55.8c3.1 3.1 3.1 8.2 0 11.3l-11.3 11.3a8.03 8.03 0 0 1-11.3 0l-55.7-55.8-45.3 45.3 55.8 55.8c3.1 3.1 3.1 8.2 0 11.3l-11.3 11.3a8.03 8.03 0 0 1-11.3 0L111 265.2l-26.4 26.4a79.9 79.9 0 0 0-23 65.4l7.1 63.6L2.3 487a8.03 8.03 0 0 0 0 11.3l11.3 11.3c3.1 3.1 8.2 3.1 11.3 0l66.3-66.3 63.6 7.1c23.9 2.6 47.9-5.4 65.4-23l181.9-181.9-135.7-135.7-64.9 65zm308.2-93.3L430.5 2.3a8.03 8.03 0 0 0-11.3 0l-11.3 11.3a8.03 8.03 0 0 0 0 11.3l28.3 28.3-45.3 45.3-56.6-56.6-17-17a8.03 8.03 0 0 0-11.3 0l-33.9 33.9a8.03 8.03 0 0 0 0 11.3l17 17L424.8 223l17 17c3.1 3.1 8.2 3.1 11.3 0l33.9-34c3.1-3.1 3.1-8.2 0-11.3l-73.5-73.5 45.3-45.3 28.3 28.3c3.1 3.1 8.2 3.1 11.3 0l11.3-11.3c3.1-3.2 3.1-8.2 0-11.4z"/>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-              
-            </div>
+          <div class="pt-20 px-8 inline-block">
+            <ul v-show="currentPage == 0" class="flex flex-row gap gap-x-8 text-sm text-black mx-2 px-4 py-2 rounded bg-indigo-200 opacity-50 w-auto">
+              <li><a class="underline hover:no-underline hover:text-indigo-900" href="https://rhythm-doctor.gitbook.io/level-editor/">Level Editor tutorial</a> by Klyzx et al</li>
+              <li>Visit <a class="underline hover:no-underline hover:text-indigo-900" href="https://discord.gg/rhythmdr">the Discord server</a> to add a level</li>
+              <li><a class="underline hover:no-underline hover:text-indigo-900" href="https://twitter.com/RhythmDrGame">@RhythmDrGame</a> on Twitter</li>
+            </ul>
+          </div>
 
-            <!-- div for everything below the image -->
-            <div class="p-4 h-full flex flex-col justify-between">
-              <!-- aligned up -->
-              <div>
-                <!-- artist + song -->
-                <h2 class="text-gray-700 text-xs leading-cramped break-words">{{level.artist}}</h2>
-                <h1 :class="level.verified ? 'font-semibold' : 'font-light'" class="font-semibold text-lg leading-tight break-words">{{level.song}}</h1>
+
+
+          <!-- CARDS DISPLAY -->
+          <div v-show="display_type == 'cards'" id="levels-cards" 
+          class="flex-grow pt-4 w-full justify-center mx-auto flex flex-row flex-wrap items-stretch px-8">
+            <!-- each card starts here -->
+                  <!-- ticker -->
+
+            <article 
+            v-for="(level,index) in truncated"
+            class="flex-1 flex flex-col 
+                min-w-72 max-w-sm m-2
+                bg-gray-200 
+                rounded-lg shadow-md hover:shadow-xl transition-shadow
+                group">
+
+              <!-- image -->
+              <div class="relative pb-9/16 bg-gray-700 rounded-t-lg overflow-hidden">
                 
-                <!-- icons + metadata -->
-                <div class="flex flex-wrap gap gap-x-3 mt-1">
-                  <div class="flex items-center text-gray-700 text-xs max-w-full">
-                    <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="pencil-alt" class="svg-inline--fa fa-pencil-alt fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                      <path fill="currentColor" d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3 0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9 0l60.1 60.1a47.92 47.92 0 0 1 0 67.9zM284.2 99.8L21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3 0-17l-111-111c-4.8-4.7-12.4-4.7-17.1 0zM124.1 339.9c-5.5-5.5-5.5-14.3 0-19.8l154-154c5.5-5.5 14.3-5.5 19.8 0s5.5 14.3 0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8 0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"/>
+                <img class="group-hover:defocus transition-filter absolute h-full w-full object-cover" :src="level.preview_img">
+                
+                <!-- overlay -->
+                <div 
+                class="opacity-0 group-hover:opacity-100 transition-opacity
+                    absolute flex h-full w-full p-4 rounted-t-lg">
+                  <!-- description -->
+                  <div class="flex-initial w-full text-white text-sm overflow-y-auto break-words"
+                  v-html="convertToHtml(level.description)">
+                  </div>
+                  <!-- download + copy link + autoimport buttons -->
+                  <div class="flex-none w-8 ml-2 flex flex-col">
+                    <a :data-clipboard-text="level.download_url" class="copy-link text-white border border-white rounded-lg hover:bg-purple-500 hover:cursor-pointer">
+                      <svg class="h-full w-full p-2 fill-current" aria-hidden="true" data-prefix="fas" data-icon="copy" class="svg-inline--fa fa-copy fa-w-14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path fill="currentColor" d="M320 448v40a24 24 0 0 1-24 24H24a24 24 0 0 1-24-24V120a24 24 0 0 1 24-24h72v296c0 30.88 25.12 56 56 56h168zm0-344V0H152a24 24 0 0 0-24 24v368a24 24 0 0 0 24 24h272a24 24 0 0 0 24-24V128H344c-13.2 0-24-10.8-24-24zm120.97-31.03L375.03 7.03A24 24 0 0 0 358.06 0H352v96h96v-6.06a24 24 0 0 0-7.03-16.97z"/>
+                      </svg>
+                    </a>
+                    <a :href="level.download_url" class="mt-4 text-white border border-white rounded-lg hover:bg-purple-500">
+                      <svg class="h-full w-full p-2 fill-current" aria-hidden="true" data-prefix="fas" data-icon="download" class="svg-inline--fa fa-download fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49a51.24 51.24 0 0 0 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"/>
+                      </svg>
+                    </a>
+                    <a v-show="showAutoImportLinks" :href="getAutoimportLink(level.download_url)" class="mt-4 text-white border border-white rounded-lg hover:bg-purple-500">
+                      <svg class="h-full w-full p-2 fill-current" aria-hidden="true" data-prefix="fas" data-icon="download" class="svg-inline--fa fa-download fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M201.5 174.8l55.7 55.8c3.1 3.1 3.1 8.2 0 11.3l-11.3 11.3a8.03 8.03 0 0 1-11.3 0l-55.7-55.8-45.3 45.3 55.8 55.8c3.1 3.1 3.1 8.2 0 11.3l-11.3 11.3a8.03 8.03 0 0 1-11.3 0L111 265.2l-26.4 26.4a79.9 79.9 0 0 0-23 65.4l7.1 63.6L2.3 487a8.03 8.03 0 0 0 0 11.3l11.3 11.3c3.1 3.1 8.2 3.1 11.3 0l66.3-66.3 63.6 7.1c23.9 2.6 47.9-5.4 65.4-23l181.9-181.9-135.7-135.7-64.9 65zm308.2-93.3L430.5 2.3a8.03 8.03 0 0 0-11.3 0l-11.3 11.3a8.03 8.03 0 0 0 0 11.3l28.3 28.3-45.3 45.3-56.6-56.6-17-17a8.03 8.03 0 0 0-11.3 0l-33.9 33.9a8.03 8.03 0 0 0 0 11.3l17 17L424.8 223l17 17c3.1 3.1 8.2 3.1 11.3 0l33.9-34c3.1-3.1 3.1-8.2 0-11.3l-73.5-73.5 45.3-45.3 28.3 28.3c3.1 3.1 8.2 3.1 11.3 0l11.3-11.3c3.1-3.2 3.1-8.2 0-11.4z"/>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+                
+              </div>
+
+              <!-- div for everything below the image -->
+              <div class="p-4 h-full flex flex-col justify-between">
+                <!-- aligned up -->
+                <div>
+                  <!-- artist + song -->
+                  <h2 class="text-gray-700 text-xs leading-cramped break-words">{{level.artist}}</h2>
+                  <h1 :class="level.verified ? 'font-semibold' : 'font-light'" class="font-semibold text-lg leading-tight break-words">{{level.song}}</h1>
+                  
+                  <!-- icons + metadata -->
+                  <div class="flex flex-wrap gap gap-x-3 mt-1">
+                    <div class="flex items-center text-gray-700 text-xs max-w-full">
+                      <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="pencil-alt" class="svg-inline--fa fa-pencil-alt fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3 0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9 0l60.1 60.1a47.92 47.92 0 0 1 0 67.9zM284.2 99.8L21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3 0-17l-111-111c-4.8-4.7-12.4-4.7-17.1 0zM124.1 339.9c-5.5-5.5-5.5-14.3 0-19.8l154-154c5.5-5.5 14.3-5.5 19.8 0s5.5 14.3 0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8 0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"/>
+                      </svg>
+                      <ul>
+                        <li class="inline-block" v-for="(author, i) in level.author">
+                        <a
+                        class="inline-block ml-1 break-all hover:underline hover:text-gray-900 hover:cursor-pointer"
+                        v-on:click="addToSearch(author)"
+                        >{{author}}
+                        </a>{{getSeperator(i, level.author.length)}}
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="flex items-center text-gray-700 text-xs">
+                      <svg class="h-3 w-4 fill-current" aria-hidden="true" data-prefix="fas" data-icon="syringe" class="svg-inline--fa fa-syringe fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M555.3 300.1L424.2 112.8a114.36 114.36 0 00-159.3-28.1 113.91 113.91 0 00-41.5 53.8C220.5 79.2 172 32 112 32 50.1 32 0 82.1 0 144v224c0 61.9 50.1 112 112 112s112-50.1 112-112V218.9c3.3 8.6 7.3 17.1 12.8 25L368 431.2c22.2 31.8 57.7 48.8 93.8 48.8 22.7 0 45.5-6.7 65.5-20.7 51.7-36.2 64.2-107.5 28-159.2zM160 256H64V144a48.01 48.01 0 0196 0v112zm194.8 44.9l-65.6-93.7c-7.7-11-10.7-24.4-8.3-37.6 2.3-13.2 9.7-24.8 20.7-32.5 8.5-6 18.5-9.1 28.8-9.1 16.5 0 31.9 8 41.3 21.5l65.6 93.7-82.5 57.7z"/>
+                      </svg>
+                      <a 
+                      class="ml-1 hover:underline hover:text-gray-900 hover:cursor-pointer"
+                      v-on:click="addDifficultyToSearch(level.difficulty)"
+                      >
+                      {{getDifficultyText(level.difficulty)}}
+                      </a>
+                    </div>
+                    <div class="flex items-center text-gray-700 text-xs">
+                      <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="heartbeat" class="svg-inline--fa fa-heartbeat fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path d="M320.2 243.8l-49.7 99.4c-6 12.1-23.4 11.7-28.9-.6l-56.9-126.3-30 71.7H60.6l182.5 186.5c7.1 7.3 18.6 7.3 25.7 0L451.4 288H342.3l-22.1-44.2zM473.7 73.9l-2.4-2.5c-51.5-52.6-135.8-52.6-187.4 0L256 100l-27.9-28.5a130.83 130.83 0 0 0-187.4 0l-2.4 2.4C-10.4 123.7-12.5 203 31 256h102.4l35.9-86.2c5.4-12.9 23.6-13.2 29.4-.4l58.2 129.3 49-97.9c5.9-11.8 22.7-11.8 28.6 0l27.6 55.2H481c43.5-53 41.4-132.3-7.3-182.1z"/>
+                      </svg>
+                      <p class="ml-1">{{getBPMText(level.min_bpm, level.max_bpm)}} BPM
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+
+                
+                <div class="flex flex-wrap items-end mt-2 relative h-auto gap gap-2">
+                  <!-- epilepsy warning / starred -->
+                  <div v-show="level.seizure_warning" class="flex items-center bg-orange-200 rounded-full px-3 text-xs font-semibold">
+                    <svg class="h-3 w-3 fill-current text-orange-400" aria-hidden="true" data-prefix="fas" data-icon="exclamation-triangle" class="svg-inline--fa fa-exclamation-triangle fa-w-18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                      <path fill="currentColor" d="M569.52 440.01c18.46 32-4.71 71.99-41.58 71.99H48.05c-36.93 0-60-40.05-41.57-71.99L246.42 24c18.47-32.01 64.72-31.96 83.16 0L569.52 440zM288 354a46 46 0 1 0 0 92 46 46 0 0 0 0-92zm-43.67-165.35l7.41 136A12 12 0 0 0 263.74 336h48.54a12 12 0 0 0 11.98-11.35l7.42-136A12 12 0 0 0 319.7 176h-63.38a12 12 0 0 0-11.98 12.65z"/>
                     </svg>
-                    <ul>
+                    <span class="inline-block ml-1 text-orange-500">
+                      Seizure warning
+                    </span>
+                  </div>
+                  <div v-show="level.starred" class="flex items-baseline bg-teal-200 rounded-full px-3 text-xs font-semibold">
+                      <svg class="h-3 w-3 fill-current text-teal-400" aria-hidden="true" data-prefix="fas" data-icon="stars" class="svg-inline--fa fa-stars fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M336 160l26.7-53.3L416 80l-53.3-26.7L336 0l-26.7 53.3L256 80l53.3 26.7L336 160zm144 32l-16-32-16 32-32 16 32 16 16 32 16-32 32-16-32-16zm-115.7 75.3L259.5 252l-46.9-95.2c-8.4-17-32.7-17.2-41.2 0L124.5 252 19.7 267.3C.9 270-6.7 293.2 7 306.5l75.9 74-18 104.6c-3.2 18.9 16.7 33.1 33.3 24.2l93.8-49.4 93.8 49.4c16.7 8.8 36.5-5.3 33.3-24.2l-17.9-104.6 75.9-74c13.6-13.3 6-36.5-12.8-39.2z"/>
+                      </svg>
+                      <span class="inline-block ml-1 text-teal-500">
+                        Starred
+                      </span>
+                    </div>
+                  <!-- tags -->
+                  <span 
+                  v-for="tag in level.tags" 
+                  class="inline-block max-w-full truncate 
+                  bg-gray-300 rounded-full px-3 text-xs font-semibold text-gray-600
+                  hover:bg-gray-400 hover:text-gray-700 hover:cursor-pointer
+                  "
+                  v-on:click="addTagToSearch(tag)"
+                  >
+                  {{tag}}
+                  </span>
+                </div>
+                
+              </div>
+            </article> <!-- end card display -->
+          </div>
+          <!-- TABLE DISPLAY -->
+          <div v-show="display_type == 'list'" id="levels-list"
+          class='flex justify-center pt-4'
+          >
+            <table cellspacing="0" class="table-fixed text-sm mx-6 border-separate">
+              <thead>
+                <tr class="text-base font-semibold">
+                  <th class="text-left px-2 w-24">
+                    <p>Image</p>
+                  </th>
+                  <th class="text-left px-2 w-56">
+                    <p>Song</p>
+                  </th>
+                  <th class="text-left px-2 w-32">
+                    <p>Creator</p>
+                  </th>
+                  <th class="text-left px-2 w-20">
+                    <p>Difficulty</p>
+                  </th>
+                  <th class="text-left px-2 w-32">
+                    <p>Publish date</p>
+                  </th>
+                  <th class="text-left px-2 w-24">
+                    <p>Modes</p>
+                  </th>
+                  <th class="text-left px-2 w-20">
+                      <p>BPM</p>
+                  </th>
+                  <th class="text-left px-2 w-96">
+                      <p>Description</p>
+                  </th>
+                  <th class="text-left px-2 w-64">
+                    <p>Tags</p>
+                  </th>
+                  <th class="text-left px-2 w-12">
+                  </th> 
+                </tr>
+              </thead>
+              <tr 
+              v-for="(level,index) in truncated"
+              class="overflow-hidden"
+              >
+                <td v-bind:class="{ 'rounded-tl-lg' : index === 0, 'bg-gray-200' : index % 2, 'bg-gray-300' : !(index % 2)}"> <!-- IMAGE -->
+                  <div class="relative pb-9/16 w-32 bg-gray-700 rounded overflow-hidden">
+                    <img class="absolute object-contain" :src="level.preview_img"/>
+                  </div>
+                </td>
+                <td :class="index % 2 ? 'bg-gray-200' : 'bg-gray-300'" class='px-2'> <!-- SONG TITLE + ARTIST -->
+                  <div>
+                    <h1 class="font-semibold">{{level.song}}</h1>
+                    <h2>{{level.artist}}</h2>
+                  </div>
+                </td>
+                <td :class="index % 2 ? 'bg-gray-200' : 'bg-gray-300'" class='px-2'> <!-- CREATOR -->
+                  <ul>
                       <li class="inline-block" v-for="(author, i) in level.author">
                       <a
                       class="inline-block ml-1 break-all hover:underline hover:text-gray-900 hover:cursor-pointer"
@@ -232,174 +358,54 @@
                       </a>{{getSeperator(i, level.author.length)}}
                       </li>
                     </ul>
+                </td>
+                <td :class="index % 2 ? 'bg-gray-200' : 'bg-gray-300'" class='px-2'> <!-- DIFFICULTY -->
+                  <p>{{getDifficultyText(level.difficulty)}}</p>
+                </td>
+                <td :class="index % 2 ? 'bg-gray-200' : 'bg-gray-300'" class='px-2'> <!-- PUBLISH DATE -->
+                  <p>{{niceDateFormatted(level.last_updated)}}</p>
+                </td>
+                <td :class="index % 2 ? 'bg-gray-200' : 'bg-gray-300'" class='px-2'> <!-- PLAYERS -->
+                  <p>{{playerFormatted(level.single_player, level.two_player)}}</p>
+                </td>
+                <td :class="index % 2 ? 'bg-gray-200' : 'bg-gray-300'" class='px-2'> <!-- BPM -->
+                  <p>{{getBPMText(level.min_bpm, level.max_bpm)}}</p>
+                </td>
+                <td :class="index % 2 ? 'bg-gray-200' : 'bg-gray-300'" class='break-words break-all hyphens px-2' v-html="listViewDescription(level)"> <!-- DESCRIPTION -->
+                  
+                </td>
+                <td :class="index % 2 ? 'bg-gray-200' : 'bg-gray-300'" class="h-24 px-2">  <!-- TAGS -->
+                  <div class="h-full my-2 overflow-y-auto">
+                      <!-- tags -->
+                      <span 
+                      v-for="tag in level.tags" 
+                      class="inline-flex items-center truncate max-w-xs justify-start text-gray-700 rounded-full px-3 text-xs font-semibold bg-gray-400 
+                      hover:bg-gray-500 hover:text-gray-800 hover:cursor-pointer"                
+            
+                      v-on:click="addTagToSearch(tag)"
+                      >
+                      {{tag}}
+                      </span>
+                    </div>
+                </td>
+                <td v-bind:class="{ 'rounded-tr-lg' : index === 0, 'bg-gray-200' : index % 2, 'bg-gray-300' : !(index % 2)}"> <!-- DOWNLOAD + COPY LINK BUTTONS-->
+                  <div class="flex flex-col items-center justify-around">
+                      <a :data-clipboard-text="level.download_url" class="h-8 w-8 copy-link text-gray-600 border border-gray-600 rounded-lg hover:bg-purple-300 hover:cursor-pointer">
+                        <svg class="h-full w-full p-2 fill-current" aria-hidden="true" data-prefix="fas" data-icon="copy" class="svg-inline--fa fa-copy fa-w-14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                          <path fill="currentColor" d="M320 448v40a24 24 0 0 1-24 24H24a24 24 0 0 1-24-24V120a24 24 0 0 1 24-24h72v296c0 30.88 25.12 56 56 56h168zm0-344V0H152a24 24 0 0 0-24 24v368a24 24 0 0 0 24 24h272a24 24 0 0 0 24-24V128H344c-13.2 0-24-10.8-24-24zm120.97-31.03L375.03 7.03A24 24 0 0 0 358.06 0H352v96h96v-6.06a24 24 0 0 0-7.03-16.97z"/>
+                        </svg>
+                      </a>
+                      <a :href="level.download_url" class="h-8 w-8 mt-2 text-gray-600 border border-gray-600 rounded-lg hover:bg-purple-300">
+                        <svg class="h-full w-full p-2 fill-current" aria-hidden="true" data-prefix="fas" data-icon="download" class="svg-inline--fa fa-download fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                          <path fill="currentColor" d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49a51.24 51.24 0 0 0 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"/>
+                        </svg>
+                      </a>
                   </div>
-                  <div class="flex items-center text-gray-700 text-xs">
-                    <svg class="h-3 w-4 fill-current" aria-hidden="true" data-prefix="fas" data-icon="syringe" class="svg-inline--fa fa-syringe fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                      <path fill="currentColor" d="M555.3 300.1L424.2 112.8a114.36 114.36 0 00-159.3-28.1 113.91 113.91 0 00-41.5 53.8C220.5 79.2 172 32 112 32 50.1 32 0 82.1 0 144v224c0 61.9 50.1 112 112 112s112-50.1 112-112V218.9c3.3 8.6 7.3 17.1 12.8 25L368 431.2c22.2 31.8 57.7 48.8 93.8 48.8 22.7 0 45.5-6.7 65.5-20.7 51.7-36.2 64.2-107.5 28-159.2zM160 256H64V144a48.01 48.01 0 0196 0v112zm194.8 44.9l-65.6-93.7c-7.7-11-10.7-24.4-8.3-37.6 2.3-13.2 9.7-24.8 20.7-32.5 8.5-6 18.5-9.1 28.8-9.1 16.5 0 31.9 8 41.3 21.5l65.6 93.7-82.5 57.7z"/>
-                    </svg>
-                    <a 
-                    class="ml-1 hover:underline hover:text-gray-900 hover:cursor-pointer"
-                    v-on:click="addDifficultyToSearch(level.difficulty)"
-                    >
-                    {{getDifficultyText(level.difficulty)}}
-                    </a>
-                  </div>
-                  <div class="flex items-center text-gray-700 text-xs">
-                    <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="heartbeat" class="svg-inline--fa fa-heartbeat fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                      <path d="M320.2 243.8l-49.7 99.4c-6 12.1-23.4 11.7-28.9-.6l-56.9-126.3-30 71.7H60.6l182.5 186.5c7.1 7.3 18.6 7.3 25.7 0L451.4 288H342.3l-22.1-44.2zM473.7 73.9l-2.4-2.5c-51.5-52.6-135.8-52.6-187.4 0L256 100l-27.9-28.5a130.83 130.83 0 0 0-187.4 0l-2.4 2.4C-10.4 123.7-12.5 203 31 256h102.4l35.9-86.2c5.4-12.9 23.6-13.2 29.4-.4l58.2 129.3 49-97.9c5.9-11.8 22.7-11.8 28.6 0l27.6 55.2H481c43.5-53 41.4-132.3-7.3-182.1z"/>
-                    </svg>
-                    <p class="ml-1">{{getBPMText(level.min_bpm, level.max_bpm)}} BPM
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-
-              
-              <div class="flex flex-wrap items-end mt-2 relative h-auto gap gap-2">
-                <!-- epilepsy warning / starred -->
-                <div v-show="level.seizure_warning" class="flex items-center bg-orange-200 rounded-full px-3 text-xs font-semibold">
-                  <svg class="h-3 w-3 fill-current text-orange-400" aria-hidden="true" data-prefix="fas" data-icon="exclamation-triangle" class="svg-inline--fa fa-exclamation-triangle fa-w-18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                    <path fill="currentColor" d="M569.52 440.01c18.46 32-4.71 71.99-41.58 71.99H48.05c-36.93 0-60-40.05-41.57-71.99L246.42 24c18.47-32.01 64.72-31.96 83.16 0L569.52 440zM288 354a46 46 0 1 0 0 92 46 46 0 0 0 0-92zm-43.67-165.35l7.41 136A12 12 0 0 0 263.74 336h48.54a12 12 0 0 0 11.98-11.35l7.42-136A12 12 0 0 0 319.7 176h-63.38a12 12 0 0 0-11.98 12.65z"/>
-                  </svg>
-                  <span class="inline-block ml-1 text-orange-500">
-                    Seizure warning
-                  </span>
-                </div>
-                <div v-show="level.starred" class="flex items-baseline bg-teal-200 rounded-full px-3 text-xs font-semibold">
-                    <svg class="h-3 w-3 fill-current text-teal-400" aria-hidden="true" data-prefix="fas" data-icon="stars" class="svg-inline--fa fa-stars fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                      <path fill="currentColor" d="M336 160l26.7-53.3L416 80l-53.3-26.7L336 0l-26.7 53.3L256 80l53.3 26.7L336 160zm144 32l-16-32-16 32-32 16 32 16 16 32 16-32 32-16-32-16zm-115.7 75.3L259.5 252l-46.9-95.2c-8.4-17-32.7-17.2-41.2 0L124.5 252 19.7 267.3C.9 270-6.7 293.2 7 306.5l75.9 74-18 104.6c-3.2 18.9 16.7 33.1 33.3 24.2l93.8-49.4 93.8 49.4c16.7 8.8 36.5-5.3 33.3-24.2l-17.9-104.6 75.9-74c13.6-13.3 6-36.5-12.8-39.2z"/>
-                    </svg>
-                    <span class="inline-block ml-1 text-teal-500">
-                      Starred
-                    </span>
-                  </div>
-                <!-- tags -->
-                <span 
-                v-for="tag in level.tags" 
-                class="inline-block max-w-full truncate 
-                bg-gray-300 rounded-full px-3 text-xs font-semibold text-gray-600
-                hover:bg-gray-400 hover:text-gray-700 hover:cursor-pointer
-                "
-                v-on:click="addTagToSearch(tag)"
-                >
-                {{tag}}
-                </span>
-              </div>
-              
-            </div>
-          </article> <!-- end card display -->
-        </div>
-        <!-- TABLE DISPLAY -->
-        <div v-show="display_type == 'list'" id="levels-list"
-        class='flex justify-center pt-16'
-        >
-          <table cellspacing="0" class="table-fixed text-sm mx-6 border-separate">
-            <thead>
-              <tr class="text-base font-semibold">
-                <th class="text-left px-2 w-24">
-                  <p>Image</p>
-                </th>
-                <th class="text-left px-2 w-56">
-                  <p>Song</p>
-                </th>
-                <th class="text-left px-2 w-32">
-                  <p>Creator</p>
-                </th>
-                <th class="text-left px-2 w-20">
-                  <p>Difficulty</p>
-                </th>
-                <th class="text-left px-2 w-32">
-                  <p>Publish date</p>
-                </th>
-                <th class="text-left px-2 w-24">
-                  <p>Modes</p>
-                </th>
-                <th class="text-left px-2 w-20">
-                    <p>BPM</p>
-                </th>
-                <th class="text-left px-2 w-96">
-                    <p>Description</p>
-                </th>
-                <th class="text-left px-2 w-64">
-                  <p>Tags</p>
-                </th>
-                <th class="text-left px-2 w-12">
-                </th> 
+                </td>
               </tr>
-            </thead>
-            <tr 
-            v-for="(level,index) in truncated"
-            class="overflow-hidden"
-            >
-              <td v-bind:class="{ 'rounded-tl-lg' : index === 0, 'bg-gray-200' : index % 2, 'bg-gray-300' : !(index % 2)}"> <!-- IMAGE -->
-                <div class="relative pb-9/16 w-32 bg-gray-700 rounded overflow-hidden">
-                  <img class="absolute object-contain" :src="level.preview_img"/>
-                </div>
-              </td>
-              <td :class="index % 2 ? 'bg-gray-200' : 'bg-gray-300'" class='px-2'> <!-- SONG TITLE + ARTIST -->
-                <div>
-                  <h1 class="font-semibold">{{level.song}}</h1>
-                  <h2>{{level.artist}}</h2>
-                </div>
-              </td>
-              <td :class="index % 2 ? 'bg-gray-200' : 'bg-gray-300'" class='px-2'> <!-- CREATOR -->
-                <ul>
-                    <li class="inline-block" v-for="(author, i) in level.author">
-                    <a
-                    class="inline-block ml-1 break-all hover:underline hover:text-gray-900 hover:cursor-pointer"
-                    v-on:click="addToSearch(author)"
-                    >{{author}}
-                    </a>{{getSeperator(i, level.author.length)}}
-                    </li>
-                  </ul>
-              </td>
-              <td :class="index % 2 ? 'bg-gray-200' : 'bg-gray-300'" class='px-2'> <!-- DIFFICULTY -->
-                <p>{{getDifficultyText(level.difficulty)}}</p>
-              </td>
-              <td :class="index % 2 ? 'bg-gray-200' : 'bg-gray-300'" class='px-2'> <!-- PUBLISH DATE -->
-                <p>{{niceDateFormatted(level.last_updated)}}</p>
-              </td>
-              <td :class="index % 2 ? 'bg-gray-200' : 'bg-gray-300'" class='px-2'> <!-- PLAYERS -->
-                <p>{{playerFormatted(level.single_player, level.two_player)}}</p>
-              </td>
-              <td :class="index % 2 ? 'bg-gray-200' : 'bg-gray-300'" class='px-2'> <!-- BPM -->
-                <p>{{getBPMText(level.min_bpm, level.max_bpm)}}</p>
-              </td>
-              <td :class="index % 2 ? 'bg-gray-200' : 'bg-gray-300'" class='break-words break-all hyphens px-2' v-html="listViewDescription(level)"> <!-- DESCRIPTION -->
-                
-              </td>
-              <td :class="index % 2 ? 'bg-gray-200' : 'bg-gray-300'" class="h-24 px-2">  <!-- TAGS -->
-                <div class="h-full my-2 overflow-y-auto">
-                    <!-- tags -->
-                    <span 
-                    v-for="tag in level.tags" 
-                    class="inline-flex items-center truncate max-w-xs justify-start text-gray-700 rounded-full px-3 text-xs font-semibold bg-gray-400 
-                    hover:bg-gray-500 hover:text-gray-800 hover:cursor-pointer"                
-          
-                    v-on:click="addTagToSearch(tag)"
-                    >
-                    {{tag}}
-                    </span>
-                  </div>
-              </td>
-              <td v-bind:class="{ 'rounded-tr-lg' : index === 0, 'bg-gray-200' : index % 2, 'bg-gray-300' : !(index % 2)}"> <!-- DOWNLOAD + COPY LINK BUTTONS-->
-                <div class="flex flex-col items-center justify-around">
-                    <a :data-clipboard-text="level.download_url" class="h-8 w-8 copy-link text-gray-600 border border-gray-600 rounded-lg hover:bg-purple-300 hover:cursor-pointer">
-                      <svg class="h-full w-full p-2 fill-current" aria-hidden="true" data-prefix="fas" data-icon="copy" class="svg-inline--fa fa-copy fa-w-14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                        <path fill="currentColor" d="M320 448v40a24 24 0 0 1-24 24H24a24 24 0 0 1-24-24V120a24 24 0 0 1 24-24h72v296c0 30.88 25.12 56 56 56h168zm0-344V0H152a24 24 0 0 0-24 24v368a24 24 0 0 0 24 24h272a24 24 0 0 0 24-24V128H344c-13.2 0-24-10.8-24-24zm120.97-31.03L375.03 7.03A24 24 0 0 0 358.06 0H352v96h96v-6.06a24 24 0 0 0-7.03-16.97z"/>
-                      </svg>
-                    </a>
-                    <a :href="level.download_url" class="h-8 w-8 mt-2 text-gray-600 border border-gray-600 rounded-lg hover:bg-purple-300">
-                      <svg class="h-full w-full p-2 fill-current" aria-hidden="true" data-prefix="fas" data-icon="download" class="svg-inline--fa fa-download fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                        <path fill="currentColor" d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49a51.24 51.24 0 0 0 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"/>
-                      </svg>
-                    </a>
-                </div>
-              </td>
-            </tr>
-          </table>
-        </div> <!-- ends table layout div -->
+            </table>
+          </div> <!-- ends table layout div -->
+        </div> <!-- ends card/table div -->
       </div> <!-- ends flexbox container div-->
     </div> <!-- end loaded state div -->
 
