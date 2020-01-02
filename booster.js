@@ -16,6 +16,8 @@ async function getBoosterPack(name) {
         return YAML.parse(data.data);
     })
     .catch( (err) => {
+        console.log("Yaml parse error, I'm printing it now...");
+        console.log(err);
         return [];
     })
 }
