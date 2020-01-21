@@ -120,7 +120,7 @@
       <div class="flex flex-row">
 
         <!-- sidebar -->
-        <div v-show="boostersOpen && params.testing" class="fixed min-h-screen max-h-screen overflow-auto pt-16 px-4 pb-4 flex-shrink-0 bg-gray-800 text-gray-400 w-72 hidden md:block">
+        <div v-show="boostersOpen" class="fixed min-h-screen max-h-screen overflow-auto pt-16 px-4 pb-4 flex-shrink-0 bg-gray-800 text-gray-400 w-72 hidden md:block">
           <div class="mb-4 text-sm text-justify">
             <p>Not sure which levels to play? Grab a booster pack! Each booster pack is a carefully curated list of levels.</p>
             <p class="mt-2">Booster packs marked with <span>
@@ -147,7 +147,7 @@
         <!-- spacer -->
         <!-- this is an invisible div that's the same size as the fixed sidebar to reflow the cards
         when the sidebar's out-->
-        <div v-show="boostersOpen && params.testing" class="min-h-screen pt-16 px-4 flex-shrink-0 bg-gray-800 text-gray-400 w-72 hidden md:block">
+        <div v-show="boostersOpen" class="min-h-screen pt-16 px-4 flex-shrink-0 bg-gray-800 text-gray-400 w-72 hidden md:block">
 
         </div>
 
