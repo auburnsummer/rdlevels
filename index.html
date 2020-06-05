@@ -16,7 +16,7 @@
     <!-- This div appears when loaded. -->
     <div v-if="state=='LOADED'" id="loaded_state">
 
-      <header class='fixed top-0 w-full z-10'>
+      <header class='fixed top-0 w-full z-10
         <!-- top part -->
         <div class='flex justify-between items-center bg-gray-800 px-3 py-2'>
           <!-- display/hide boosters icon -->
@@ -280,7 +280,7 @@
                       </span>
                     </div>
                   <div v-show="level.verified" class="flex items-baseline bg-teal-200 rounded-full px-3 text-xs font-semibold">
-                      <svg class="h-3 w-3 fill-current text-teal-400" aria-hidden="true" data-prefix="fas" data-icon="check" class="svg-inline--fa fa-check fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                      <svg class="h-3 w-3 fill-current text-teal-400" aria-hidden="true" data-prefix="fas" data-icon="exclamation-triangle" class="svg-inline--fa fa-exclamation-triangle fa-w-14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <path fill="currentColor" d="M336 160l26.7-53.3L416 80l-53.3-26.7L336 0l-26.7 53.3L256 80l53.3 26.7L336 160zm144 32l-16-32-16 32-32 16 32 16 16 32 16-32 32-16-32-16zm-115.7 75.3L259.5 252l-46.9-95.2c-8.4-17-32.7-17.2-41.2 0L124.5 252 19.7 267.3C.9 270-6.7 293.2 7 306.5l75.9 74-18 104.6c-3.2 18.9 16.7 33.1 33.3 24.2l93.8-49.4 93.8 49.4c16.7 8.8 36.5-5.3 33.3-24.2l-17.9-104.6 75.9-74c13.6-13.3 6-36.5-12.8-39.2z"/>
                       </svg>
                       <span class="inline-block ml-1 text-teal-500">
