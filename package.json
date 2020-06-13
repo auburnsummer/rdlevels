@@ -12,7 +12,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:js": "npx browserify main.js -o bundle.js",
-    "build:css": "postcss main.css -o bundle.css",
+    "build:css": "npx postcss-cli main.css -o bundle.css",
     "build": "npm run build:js && npm run build:css",
     "watch": "git ls-files | grep -vxFf .onchangeignore | entr npm run build"
   },
