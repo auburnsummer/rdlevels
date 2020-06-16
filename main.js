@@ -272,6 +272,14 @@ var app = new Vue({
         })
         .then( (data) => {
           this.boosters = data;
+          // go to starter booster if it's the first time viewing the page.
+          // (temporary addition in anticipation of steam demo bringing in newcomers).
+          let firstTime = localStorage.getItem("first_time");
+          if(!firstTime) {
+            // first time loaded!
+            localStorage.setItem("first_time","1");
+            this.searchQuery = "booster=starter";
+          }
         })
         .catch( (err) => {
             // change the state
