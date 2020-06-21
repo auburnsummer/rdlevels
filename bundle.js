@@ -52576,17 +52576,21 @@ const booster_filter = async (data, matches) => {
     while (_.some(sampler_data, isAPool)) {
         console.log("ITERATION")
 
-
         sampler_data = _.reduce(sampler_data, (prev, curr) => {
+            console.log(curr)
             if (isAPool(curr)) {
+                console.log("It's a pool!");
                 // take some of the elements and add them
                 let indexes = _.sortBy(_.sampleSize(_.range(curr.levels.length), curr.take));
                 let picked = _.map(indexes, (index) => {
                     return curr.levels[index];
                 })
+                console.log("I picked these:");
+                console.log(picked);
                 return _.concat(prev, picked)
             } else {
-                return prev;
+                console.log("Already at a level!");
+                return _.concat(prev, curr)
             }
         }, [])
 
