@@ -52565,17 +52565,35 @@ const booster_filter = async (data, matches) => {
     // get the sampler data.
     // we can poll here because this is inside a webworker
     let sampler_data = await booster.getBoosterPack(matches[1]);
+
+    console.log("BOOSTER FILTER");
     console.log(sampler_data)
-    // pick urls out of each group
-    let urls = _.flatten(
-        _.map(sampler_data, (pool) => {
-            // sort so that earlier levels in a group always show up before the later levels
-            let indexes = _.sortBy(_.sampleSize(_.range(pool.levels.length), pool.take));
-            return _.map(indexes, (index) => {
-                return pool.levels[index];
-            })
-        })
-    )
+
+    // so I realised I could avoid the scary recursive algorithm if I just mutate sampler_data
+    // keep reducing until it's only urls
+    let isAPool = (thing) => _.includes(_.keys(thing), "take")
+
+    while (_.some(sampler_data, isAPool)) {
+        console.log("ITERATION")
+
+
+        sampler_data = _.reduce(sampler_data, (prev, curr) => {
+            if (isAPool(curr)) {
+                // take some of the elements and add them
+                let indexes = _.sortBy(_.sampleSize(_.range(curr.levels.length), curr.take));
+                let picked = _.map(indexes, (index) => {
+                    return curr.levels[index];
+                })
+                return _.concat(prev, picked)
+            } else {
+                return prev;
+            }
+        }, [])
+
+        console.log(sampler_data)
+    }
+
+    let urls = _.uniq(sampler_data);
     console.log(urls);
     // map each URL to a level object, and filter out ones we couldn't find at all.
     return _.filter(_.map(urls, (url) =>  {
@@ -52588,6 +52606,7 @@ const booster_filter = async (data, matches) => {
         ])(data);
     }), _.identity)
 }
+
 
 /* REGEXES */
 const filters = [
