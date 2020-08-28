@@ -2605,6 +2605,14 @@ var app = new Vue({
         })
         .then( (data) => {
           this.boosters = data;
+          // go to starter booster if it's the first time viewing the page.
+          // (temporary addition in anticipation of steam demo bringing in newcomers).
+          let firstTime = localStorage.getItem("first_time");
+          if(!firstTime) {
+            // first time loaded!
+            localStorage.setItem("first_time","1");
+            this.searchQuery = "booster=starter";
+          }
         })
         .catch( (err) => {
             // change the state
@@ -52557,17 +52565,39 @@ const booster_filter = async (data, matches) => {
     // get the sampler data.
     // we can poll here because this is inside a webworker
     let sampler_data = await booster.getBoosterPack(matches[1]);
+
+    console.log("BOOSTER FILTER");
     console.log(sampler_data)
-    // pick urls out of each group
-    let urls = _.flatten(
-        _.map(sampler_data, (pool) => {
-            // sort so that earlier levels in a group always show up before the later levels
-            let indexes = _.sortBy(_.sampleSize(_.range(pool.levels.length), pool.take));
-            return _.map(indexes, (index) => {
-                return pool.levels[index];
-            })
-        })
-    )
+
+    // so I realised I could avoid the scary recursive algorithm if I just mutate sampler_data
+    // keep reducing until it's only urls
+    let isAPool = (thing) => _.includes(_.keys(thing), "take")
+
+    while (_.some(sampler_data, isAPool)) {
+        console.log("ITERATION")
+
+        sampler_data = _.reduce(sampler_data, (prev, curr) => {
+            console.log(curr)
+            if (isAPool(curr)) {
+                console.log("It's a pool!");
+                // take some of the elements and add them
+                let indexes = _.sortBy(_.sampleSize(_.range(curr.levels.length), curr.take));
+                let picked = _.map(indexes, (index) => {
+                    return curr.levels[index];
+                })
+                console.log("I picked these:");
+                console.log(picked);
+                return _.concat(prev, picked)
+            } else {
+                console.log("Already at a level!");
+                return _.concat(prev, curr)
+            }
+        }, [])
+
+        console.log(sampler_data)
+    }
+
+    let urls = _.uniq(sampler_data);
     console.log(urls);
     // map each URL to a level object, and filter out ones we couldn't find at all.
     return _.filter(_.map(urls, (url) =>  {
@@ -52580,6 +52610,7 @@ const booster_filter = async (data, matches) => {
         ])(data);
     }), _.identity)
 }
+
 
 /* REGEXES */
 const filters = [
