@@ -10,7 +10,7 @@
   <div id="app" class="min-h-screen antialiased text-gray-900 bg-gray-600 font-sans">
     <!-- This div appears while loading.-->
     <div v-if="state=='LOADING'" id="loading_state">
-      <p>Loading..</p>
+      <p>Loading...</p>
     </div>
 
     <!-- This div appears when loaded. -->
@@ -173,10 +173,11 @@
 
             <article 
             v-for="(level,index) in truncated"
-            class="flex-1 flex flex-col 
+            class="flex-1 flex flex-col
                 min-w-72 max-w-sm m-2
                 bg-gray-200 
                 rounded-lg shadow-md hover:shadow-xl transition-shadow
+                   
                 group">
 
               <!-- image -->
@@ -260,6 +261,12 @@
                       <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="check" class="svg-inline--fa fa-check fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <title>Approved: a trusted member of the community has checked for correct BPM/offset, metadata, and cues to ensure playability.</title>
                         <path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/>
+                      </svg>
+                    </div>
+                    <div v-show="level.verified === false" class="flex items-center text-red-600 text-xs">
+                      <svg class="h-3 w-3 fill-current" aria-hidden="true" data-prefix="fas" data-icon="check" class="svg-inline--fa fa-check fa-w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <title>Unapproved: a trusted member of the community has checked for correct BPM/offset, metadata, and cues to ensure playability, and has found that this level does not meet standards.</title>
+                        <path fill="red" d="M494 416l-171-169 169-171-76-76-169 171-171-169-75 75 171 170-169 171 75 75 170-171 171 169z"/>
                       </svg>
                     </div>
                   </div>
