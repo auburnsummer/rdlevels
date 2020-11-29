@@ -160,8 +160,6 @@
               <li>Are you a streamer? Try the <a class="underline hover:no-underline hover:text-indigo-900" href="https://docs.google.com/spreadsheets/d/1acZltH8MKs81Nu-BOsaupeWfjJVDiDVoVzbIKepPdYQ/edit#gid=0">RD Streamer Setlist</a>!</li>
               <li><a class="underline hover:no-underline hover:text-indigo-900" href="https://rhythm-doctor.gitbook.io/level-editor/">Level Editor tutorial</a> by Klyzx et al</li>
               <li>Visit <a class="underline hover:no-underline hover:text-indigo-900" href="https://discord.gg/rhythmdr">the Discord server</a> to add a level</li>
-			  <li><div class="tooltip"><button class="btn" id="btn-all" data-clipboard-text="Banana Breada" onmouseout="outFunc()"><span class="tooltiptext" id="tooltip">Copy to clipboard</span>Copy All</button></div></li>
-			  <li><div class="tooltip"><button class="btn" id="btn-ver" data-clipboard-text="Banana Breadv" onmouseout="outFunc()"><span class="tooltiptext" id="tooltip">Copy to clipboard</span>Copy Verified</button></div></li>
             </ul>
           </div>
 
@@ -434,45 +432,6 @@
   </div> <!-- end app div -->
 
   <script src="bundle.js"></script>
-  
-  <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
-  <script>
-	const Http = new XMLHttpRequest();
-	const url="https://script.google.com/macros/s/AKfycbzm3I9ENulE7uOmze53cyDuj7Igi7fmGiQ6w045fCRxs_sK3D4/exec";
-	Http.open("GET", url);
-	Http.send();
-
-	Http.onreadystatechange = (e) => {
-		let download_url = JSON.parse(Http.responseText).map(({ download_url }) => download_url);
-		let download_url_verified = JSON.parse(Http.responseText).filter(({ verified }) => verified).map(({ download_url }) => download_url);
-		
-		document.getElementById("btn-all").setAttribute("data-clipboard-text", download_url.join("\n"))
-		document.getElementById("btn-ver").setAttribute("data-clipboard-text", download_url_verified.join("\n"))
-	};
-	var clipboard = new ClipboardJS('.btn');
-	
-	clipboard.on('success', function(e) {
-		console.log(e)
-		var tooltip = document.querySelectorAll(".tooltiptext");
-		tooltip.forEach(element => {
-		  element.innerHTML = "Copied URLs!";
-		});
-    });
-
-    clipboard.on('error', function(e) {
-		var tooltip = document.querySelectorAll(".tooltiptext");
-	    tooltip.forEach(element => {
-		  element.innerHTML = "Error copying URLs!";
-		});
-    });
-	
-	function outFunc() {
-      var tooltip = document.querySelectorAll(".tooltiptext");
-	  tooltip.forEach(element => {
-	    element.innerHTML = "Copy to clipboard";
-	  });
-    };
-  </script>
 </body>
 
 </html>
