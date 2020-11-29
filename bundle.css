@@ -1351,8 +1351,3 @@ tr td:first-child { border-left-style: solid; }
     display: block;
   }
 }
-
-.tooltip {
-    position: relative;
-    display: inline-block;
-}
