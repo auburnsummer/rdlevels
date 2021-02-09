@@ -73,6 +73,7 @@ var app = new Vue({
       searchQuery: '',
       sortState: "search",
       showAutoImportLinks: false,
+      showUnverifiedLevels: false,
       params: {}
     }, 
     computed: {
