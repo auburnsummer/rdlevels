@@ -79,7 +79,10 @@ var app = new Vue({
     computed: {
       truncated: function() {
         let sorted = this.sorted(this.search_results);
-        return _.chunk(this.search_results, this.limit)[this.currentPage];
+        if(!this.showUnverifiedLevels && !this.searchQuery.includes('booster')) {
+          sorted = sorted.filter((doc) => doc.verified);
+        }
+        return _.chunk(sorted, this.limit)[this.currentPage];
       },
       numberOfPages: function() {
         return _.chunk(this.search_results, this.limit).length;
