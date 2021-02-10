@@ -124,7 +124,6 @@ var app = new Vue({
     computed: {
       truncated: function() {
         let sorted = this.sorted(this.search_results);
-        let search_results;
         if(!this.showUnverifiedLevels && !this.searchQuery.includes('booster')) {
           sorted = sorted.filter((doc) => doc.verified);
         }
