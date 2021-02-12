@@ -77,12 +77,19 @@ var app = new Vue({
       params: {}
     }, 
     computed: {
+      filtered: function() {
+        let levels = this.search_results;
+        if(!this.showUnverifiedLevels && !this.searchQuery.includes('booster')) {
+          levels = levels.filter((doc) => doc.verified);
+        }
+        return levels;
+      },
       truncated: function() {
-        let sorted = this.sorted(this.search_results);
-        return _.chunk(this.search_results, this.limit)[this.currentPage];
+        const sorted = this.sorted(this.filtered);
+        return _.chunk(sorted, this.limit)[this.currentPage];
       },
       numberOfPages: function() {
-        return _.chunk(this.search_results, this.limit).length;
+        return _.chunk(this.filtered, this.limit).length;
       },
       currentPage: {
         get: function() {
