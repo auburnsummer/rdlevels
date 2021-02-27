@@ -196,12 +196,18 @@ var app = new Vue({
         };
         let sorting_functions = {
           'score': (a, b) => {
+            if (a.score === b.score) {
+              return a.song.localeCompare(b.song);
+            }
             return a.score < b.score ? -1 : 1;
           },
           'last_updated': (a, b) => {
             return (moment(a.last_updated) > moment(b.last_updated) ? -1 : 1);
           },
           'song': (a, b) => {
+            if (a.song === b.song) {
+              return a.author.localeCompare(b.author);
+            }
             return a.song.localeCompare(b.song);
           },
           'difficulty': (a, b) => {
@@ -211,9 +217,15 @@ var app = new Vue({
               'Tough' : 2,
               'VeryTough' : 3
             };
+            if (difficultyMap[a.difficulty] === difficultyMap[b.difficulty]) {
+              return a.song.localeCompare(b.song);
+            }
             return difficultyMap[a.difficulty] < difficultyMap[b.difficulty] ? -1 : 1;
           },
           'author': (a, b) => {
+            if (a.author === b.author) {
+              return a.song.localeCompare(b.song);
+            }
             return a.author.localeCompare(b.author);
           },
           'sampler': _.constant(0)
