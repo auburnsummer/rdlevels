@@ -16,9 +16,9 @@
     <!-- This div appears when loaded. -->
     <div v-if="state=='LOADED'" id="loaded_state">
 
-      <header class='fixed top-0 w-full z-10'>
+      <header class='fixed top-0 w-full z-10 pointer-events-none'>
         <!-- top part -->
-        <div class='flex justify-between items-center bg-gray-800 px-3 py-2'>
+        <div class='flex justify-between items-center bg-gray-800 px-3 py-2 pointer-events-auto'>
           <!-- display/hide boosters icon -->
           <div class='flex items-center'>
             <button v-on:click="boostersOpen = !boostersOpen" class="text-gray-400 hover:text-white">
@@ -49,7 +49,7 @@
           </div>
         </div>
         <!-- menu / right sidebar-->
-        <div v-show='trayOpen' class='bg-gray-800 px-3 pt-2 pb-4 sm:w-full sm:max-w-sm sm:float-right sm:clearfix sm:rounded-bl-lg sm:px-6'>
+        <div v-show='trayOpen' class='bg-gray-800 px-3 pt-2 pb-4 sm:w-full sm:max-w-sm sm:float-right sm:clearfix sm:rounded-bl-lg sm:px-6 pointer-events-auto'>
           <!-- pagination shows up in the sidebar on mobile -->
           <pagination class="sm:hidden"
           v-bind:current-page='currentPage' 
