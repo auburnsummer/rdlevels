@@ -94,7 +94,7 @@
                 <path fill="currentColor" d="M207.03 381.48L12.69 187.13a24 24 0 0 1 0-33.94l22.66-22.67a24 24 0 0 1 33.9-.04L224 284.51l154.75-154.03a24 24 0 0 1 33.9.04l22.66 22.67a24 24 0 0 1 0 33.94L240.97 381.48a24 24 0 0 1-33.94 0z"/>
               </svg>
             </div>
-            <span class='ml-1'>,
+            <span :hidden="sort_by === 'sampler'" class='ml-1'>,
               <a v-on:click='switchDirection' class='text-purple-300 font-bold hover:text-white hover:cursor-pointer'>
                 {{order_texts[sort_by][sort_direction]}}
               </a>
