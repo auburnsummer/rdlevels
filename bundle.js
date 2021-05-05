@@ -206,7 +206,7 @@ var app = new Vue({
           },
           'song': (a, b) => {
             if (a.song === b.song) {
-              return a.author.localeCompare(b.author);
+              return a.author[0].localeCompare(b.author[0]);
             }
             return a.song.localeCompare(b.song);
           },
@@ -223,10 +223,10 @@ var app = new Vue({
             return difficultyMap[a.difficulty] < difficultyMap[b.difficulty] ? -1 : 1;
           },
           'author': (a, b) => {
-            if (a.author === b.author) {
+            if (a.author[0] === b.author[0]) {
               return a.song.localeCompare(b.song);
             }
-            return a.author.localeCompare(b.author);
+            return a.author[0].localeCompare(b.author[0]);
           },
           'sampler': _.constant(0)
         };
@@ -344,6 +344,31 @@ var app = new Vue({
             // first time loaded!
             localStorage.setItem("first_time","1");
             this.searchQuery = "booster=starter";
+          }
+
+          // Save settings before leaving the page
+          window.addEventListener('beforeunload', () => {
+            const search_settings = {
+              limit: this.limit,
+              sort_by: this.sort_by,
+              sort_direction: this.sort_direction,
+              display_type: this.display_type,
+              showAutoImportLinks: this.showAutoImportLinks,
+              showUnverifiedLevels: this.showUnverifiedLevels
+            };
+            localStorage.setItem('search_settings', JSON.stringify(search_settings));
+          });
+
+          // Load saved settings from previous session
+          const raw_settings = localStorage.getItem('search_settings');
+          if(raw_settings) {
+            const { limit, sort_by, sort_direction, display_type, showAutoImportLinks, showUnverifiedLevels } = JSON.parse(raw_settings);
+            this.limit = limit;
+            this.sort_by = sort_by;
+            this.sort_direction = sort_direction;
+            this.display_type = display_type;
+            this.showAutoImportLinks = showAutoImportLinks;
+            this.showUnverifiedLevels = showUnverifiedLevels;
           }
         })
         .catch( (err) => {
