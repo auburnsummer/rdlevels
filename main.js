@@ -319,7 +319,8 @@ var app = new Vue({
           if(raw_settings) {
             const { limit, sort_by, sort_direction, display_type, showAutoImportLinks, showUnverifiedLevels } = JSON.parse(raw_settings);
             this.limit = limit;
-            this.sort_by = sort_by === 'sampler' ? 'last_updated' : sort_by;  // Sorting by "in order" doesn't make sense on initial view
+            // Sorting by "in order" or "relevance" doesn't make sense on initial view
+            this.sort_by = (sort_by === 'sampler' || sort_by === 'score') ? 'last_updated' : sort_by;
             this.sort_direction = sort_direction;
             this.display_type = display_type;
             this.showAutoImportLinks = showAutoImportLinks;
