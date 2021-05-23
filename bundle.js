@@ -52605,6 +52605,21 @@ const tag_filter = async (data, matches) => {
     return tag_fuse.search(matches[1]);
 }
 
+const author_filter = async (data, matches) => {
+    let options = {
+        threshold: 0.08,
+        location: 0,
+        distance: 32,
+        maxPatternLength: 32,
+        minMatchCharLength: 1,
+        keys: [
+          "author"
+        ]
+    };
+    let tag_fuse = new Fuse(data, options);
+    return tag_fuse.search(matches[1]);
+}
+
 const booster_filter = async (data, matches) => {
     seedrandom(current_random, {global: true});
     _ = _.runInContext();
@@ -52671,6 +52686,10 @@ const filters = [
     {
         regex: /booster=(\w+)/,
         func: booster_filter
+    },
+    {
+        regex: /author=(\w+)/,
+        func: author_filter
     }
 ]
 
