@@ -246,7 +246,7 @@
                         <li class="inline-block" v-for="(author, i) in level.author">
                         <a
                         class="inline-block ml-1 break-all hover:underline hover:text-gray-900 hover:cursor-pointer"
-                        v-on:click="addToSearch(author)"
+                        v-on:click="addToSearch('author=' + author)"
                         >{{author}}
                         </a>{{getSeperator(i, level.author.length)}}
                         </li>
@@ -379,7 +379,7 @@
                       <li class="inline-block" v-for="(author, i) in level.author">
                       <a
                       class="inline-block ml-1 break-all hover:underline hover:text-gray-900 hover:cursor-pointer"
-                      v-on:click="addToSearch(author)"
+                      v-on:click="addToSearch('author=' + author)"
                       >{{author}}
                       </a>{{getSeperator(i, level.author.length)}}
                       </li>

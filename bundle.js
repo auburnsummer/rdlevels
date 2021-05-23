@@ -320,7 +320,7 @@ var app = new Vue({
         axios.get(API_URL)
         .then( (data) => {
             // insert data and change the state
-            console.log(data.data);
+            // console.log(data.data);
             this.target = preprocess(data.data);
             this.search_results = this.target;
             this.startIndex = 0;
