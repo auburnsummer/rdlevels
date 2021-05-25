@@ -320,7 +320,7 @@ var app = new Vue({
         axios.get(API_URL)
         .then( (data) => {
             // insert data and change the state
-            console.log(data.data);
+            // console.log(data.data);
             this.target = preprocess(data.data);
             this.search_results = this.target;
             this.startIndex = 0;
@@ -364,7 +364,8 @@ var app = new Vue({
           if(raw_settings) {
             const { limit, sort_by, sort_direction, display_type, showAutoImportLinks, showUnverifiedLevels } = JSON.parse(raw_settings);
             this.limit = limit;
-            this.sort_by = sort_by === 'sampler' ? 'last_updated' : sort_by;  // Sorting by "in order" doesn't make sense on initial view
+            // Sorting by "in order" or "relevance" doesn't make sense on initial view
+            this.sort_by = (sort_by === 'sampler' || sort_by === 'score') ? 'last_updated' : sort_by;
             this.sort_direction = sort_direction;
             this.display_type = display_type;
             this.showAutoImportLinks = showAutoImportLinks;
@@ -52604,6 +52605,21 @@ const tag_filter = async (data, matches) => {
     return tag_fuse.search(matches[1]);
 }
 
+const author_filter = async (data, matches) => {
+    let options = {
+        threshold: 0.08,
+        location: 0,
+        distance: 32,
+        maxPatternLength: 32,
+        minMatchCharLength: 1,
+        keys: [
+          "author"
+        ]
+    };
+    let tag_fuse = new Fuse(data, options);
+    return tag_fuse.search(matches[1]);
+}
+
 const booster_filter = async (data, matches) => {
     seedrandom(current_random, {global: true});
     _ = _.runInContext();
@@ -52670,6 +52686,10 @@ const filters = [
     {
         regex: /booster=(\w+)/,
         func: booster_filter
+    },
+    {
+        regex: /author=(\w+)/,
+        func: author_filter
     }
 ]
 
