@@ -94,7 +94,7 @@
                 <path fill="currentColor" d="M207.03 381.48L12.69 187.13a24 24 0 0 1 0-33.94l22.66-22.67a24 24 0 0 1 33.9-.04L224 284.51l154.75-154.03a24 24 0 0 1 33.9.04l22.66 22.67a24 24 0 0 1 0 33.94L240.97 381.48a24 24 0 0 1-33.94 0z"/>
               </svg>
             </div>
-            <span class='ml-1'>,
+            <span :hidden="sort_by === 'sampler'" class='ml-1'>,
               <a v-on:click='switchDirection' class='text-purple-300 font-bold hover:text-white hover:cursor-pointer'>
                 {{order_texts[sort_by][sort_direction]}}
               </a>
@@ -119,6 +119,7 @@
             <svg class="w-5 h-5 fill-current" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="clipboard-check" class="svg-inline--fa fa-clipboard-check fa-w-12" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M336 64h-80c0-35.3-28.7-64-64-64s-64 28.7-64 64H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zM192 40c13.3 0 24 10.7 24 24s-10.7 24-24 24-24-10.7-24-24 10.7-24 24-24zm121.2 231.8l-143 141.8c-4.7 4.7-12.3 4.6-17-.1l-82.6-83.3c-4.7-4.7-4.6-12.3.1-17L99.1 285c4.7-4.7 12.3-4.6 17 .1l46 46.4 106-105.2c4.7-4.7 12.3-4.6 17 .1l28.2 28.4c4.7 4.8 4.6 12.3-.1 17z"></path></svg>
             <span class="ml-3"><a v-on:click='showUnverifiedLevels = !showUnverifiedLevels' class='hover:cursor-pointer font-bold text-purple-300 hover:text-white'>{{showUnverifiedLevels ? 'Show' : 'Hide'}}</a> unapproved levels</span>
           </div>
+          <div class='mt-3 text-sm text-gray-400'>Settings are saved to your cookies.</div>
         </div>
       </header>
 
@@ -165,6 +166,7 @@
               <li>Are you a streamer? Try the <a class="underline hover:no-underline hover:text-indigo-900" href="https://docs.google.com/spreadsheets/d/1acZltH8MKs81Nu-BOsaupeWfjJVDiDVoVzbIKepPdYQ/edit?usp=sharing">RD Streamer Setlist</a>!</li>
               <li><a class="underline hover:no-underline hover:text-indigo-900" href="https://rhythm-doctor.gitbook.io/level-editor/">Level Editor tutorial</a> by Klyzx et al</li>
               <li>Visit <a class="underline hover:no-underline hover:text-indigo-900" href="https://discord.gg/rhythmdr">the Discord server</a> to add a level</li>
+              <li><a class="underline hover:no-underline hover:text-indigo-900" href="https://wiki.rhythm.cafe">Rhythm Doctor Wiki</a></li>
             </ul>
           </div>
 
@@ -244,7 +246,7 @@
                         <li class="inline-block" v-for="(author, i) in level.author">
                         <a
                         class="inline-block ml-1 break-all hover:underline hover:text-gray-900 hover:cursor-pointer"
-                        v-on:click="addToSearch(author)"
+                        v-on:click="addToSearch('author=' + author)"
                         >{{author}}
                         </a>{{getSeperator(i, level.author.length)}}
                         </li>
@@ -377,7 +379,7 @@
                       <li class="inline-block" v-for="(author, i) in level.author">
                       <a
                       class="inline-block ml-1 break-all hover:underline hover:text-gray-900 hover:cursor-pointer"
-                      v-on:click="addToSearch(author)"
+                      v-on:click="addToSearch('author=' + author)"
                       >{{author}}
                       </a>{{getSeperator(i, level.author.length)}}
                       </li>
